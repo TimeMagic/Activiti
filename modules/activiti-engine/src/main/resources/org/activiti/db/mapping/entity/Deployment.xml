@@ -15,7 +15,8 @@
   
   <update id="updateDeployment" parameterType="org.activiti.engine.impl.persistence.entity.DeploymentEntity">
     update ${prefix}ACT_RE_DEPLOYMENT set
-      CATEGORY_ = #{category, jdbcType=VARCHAR}
+      CATEGORY_ = #{category, jdbcType=VARCHAR},
+      TENANT_ID_ = #{tenantId, jdbcType=VARCHAR}
     where ID_ = #{id, jdbcType=VARCHAR}
   </update>
   
@@ -78,7 +79,7 @@
         and RES.TENANT_ID_ like #{tenantIdLike}
       </if>
       <if test="withoutTenantId">
-        and RES.TENANT_ID_ is null
+        and (RES.TENANT_ID_ = '' or RES.TENANT_ID_ is null)
       </if>
       <if test="processDefinitionKey != null">
         and PROCDEF.KEY_ = #{processDefinitionKey}
