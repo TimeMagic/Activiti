@@ -484,7 +484,7 @@ try {
     <title>表达式</title>
     <para>Activiti使用UEL处理表达式。UEL即<emphasis>统一表达式语言</emphasis>，它时EE6规范的一部分（参考
           <ulink url="http://docs.oracle.com/javaee/6/tutorial/doc/gjddd.html">
-          EE6规范</ulink>）。为了在所有运行环境都支持最新UEL的所有共嫩个，我们使用了一个JUEL的修改版本。
+          EE6规范</ulink>）。为了在所有运行环境都支持最新UEL的所有功能，我们使用了一个JUEL的修改版本。
     </para>
     <para>
 	  表达式可以用在很多场景下，比如<link linkend="bpmnJavaServiceTaskXML">Java服务任务</link>，<link linkend="executionListeners">执行监听器</link>，<link linkend="taskListeners">任务监听器</link>和<link linkend="conditionalSequenceFlowXml">条件流</link>。
