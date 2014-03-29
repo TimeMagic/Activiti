@@ -525,9 +525,27 @@
                     <entry>只返回与指定分类不同的部署。</entry>
                   </row>
                   <row>
+                    <entry>tenantId</entry>
+                    <entry>否</entry>
+                    <entry>String</entry>
+                    <entry>只返回指定tenantId的部署。</entry>
+                  </row>
+                 <row>
+                    <entry>tenantIdLike</entry>
+                    <entry>否</entry>
+                    <entry>String</entry>
+                    <entry>只返回与指定tenantId匹配的部署。</entry>
+                  </row>
+                  <row>
+                    <entry>withoutTenantId</entry>
+                    <entry>否</entry>
+                    <entry>Boolean</entry>
+                    <entry>如果为 <literal>true</literal>，只返回没有设置tenantId的部署。如果为 <literal>false</literal>，忽略 <literal>withoutTenantId</literal> 参数。</entry>
+                  </row>
+                  <row>
                     <entry>sort</entry>
                     <entry>否</entry>
-                    <entry>'id'（默认），'name'或'deploytime'</entry>
+                    <entry>'id'（默认），'name'，'deploytime'或'tenantId'</entry>
                     <entry>排序属性，与'order'一起使用。</entry>
                   </row>
                   <row>
@@ -566,7 +584,8 @@
       "name": "activiti-examples.bar",
       "deploymentTime": "2010-10-13T14:54:26.750+02:00",
       "category": "examples",
-      "url": "http://localhost:8081/service/repository/deployments/10"
+      "url": "http://localhost:8081/service/repository/deployments/10",
+	  "tenantId": null
     }
   ],
   "total": 1,
@@ -637,7 +656,8 @@
   "name": "activiti-examples.bar",
   "deploymentTime": "2010-10-13T14:54:26.750+02:00",
   "category": "examples",
-  "url": "http://localhost:8081/service/repository/deployments/10"
+  "url": "http://localhost:8081/service/repository/deployments/10",
+  "tenantId" : null
 }</programlisting>
     </para>
     </section>
@@ -652,7 +672,8 @@
         </para>
         <para>请求体包含的数据类型应该是<emphasis>multipart/form-data</emphasis>。请求里应该只包含一个文件，其他额外的任务都会被忽略。
 		部署的名称就是文件域的名称。如果需要在一个部署中包含多个资源，把这些文件压缩成zip包，并要确认文件名是以<literal>.bar</literal>或<literal>.zip</literal>结尾。</para>
-        <para>
+        <para>可以在请求体中传递一个额外的参数（表单域） <literal>tenantId</literal>。字段的值会用来设置部署的租户id。</para>
+      <para>
           <table>
               <title>创建新部署 - 响应码</title>
               <tgroup cols='2'>
@@ -683,7 +704,8 @@
   "name": "activiti-examples.bar",
   "deploymentTime": "2010-10-13T14:54:26.750+02:00",
   "category": null,
-  "url": "http://localhost:8081/service/repository/deployments/10"
+  "url": "http://localhost:8081/service/repository/deployments/10",
+  "tenantId" : "myTenant"
 }</programlisting>
     </para>
   </section>
@@ -1638,7 +1660,7 @@
        <emphasis role="bold">请求体（用户）：</emphasis>
             <programlisting>
 {
-  "userId" : "kermit"
+  "user" : "kermit"
 }</programlisting>
     </para>
     <para>
@@ -1922,10 +1944,28 @@
                     <entry>Boolean</entry>
                     <entry>如果为 <literal>true</literal>，只返回已部署的模型。如果为 <literal>false</literal>，只返回未部署的模型（deploymentId为null）。</entry>
                   </row>
+                   <row>
+                    <entry>tenantId</entry>
+                    <entry>否</entry>
+                    <entry>String</entry>
+                    <entry>只返回指定tenantId的模型。</entry>
+                  </row>
+                 <row>
+                    <entry>tenantIdLike</entry>
+                    <entry>否</entry>
+                    <entry>String</entry>
+                    <entry>只返回与指定tenantId匹配的模型。</entry>
+                  </row>
+                  <row>
+                    <entry>withoutTenantId</entry>
+                    <entry>否</entry>
+                    <entry>Boolean</entry>
+                    <entry>如果为 <literal>true</literal>，只返回没有设置tenantId的模型。如果为 <literal>false</literal>，会忽略 <literal>withoutTenantId</literal> 参数。</entry>
+                  </row>
                   <row>
                     <entry>sort</entry>
                     <entry>否</entry>
-                    <entry>'id' (默认), 'category', 'createTime', 'key', 'lastUpdateTime', 'name' 和 'version'</entry>
+                    <entry>'id' (默认), 'category', 'createTime', 'key', 'lastUpdateTime', 'name'，'version'或'tenantId'</entry>
                     <entry>排序的字段，和'order'一起使用。</entry>
                   </row>
                   <row>
@@ -1974,7 +2014,8 @@
          "url":"http://localhost:8182/repository/models/10",
          "createTime":"2013-06-12T14:31:08.612+0000",
          "lastUpdateTime":"2013-06-12T14:31:08.612+0000",
-         "deploymentUrl":"http://localhost:8182/repository/deployments/7"
+         "deploymentUrl":"http://localhost:8182/repository/deployments/7",
+		 "tenantId":null
       },
 
       ...
@@ -2054,7 +2095,8 @@
    "deploymentId":"2",
    "deploymentUrl":"http://localhost:8182/repository/deployments/2",
    "createTime":"2013-06-12T12:31:19.861+0000",
-   "lastUpdateTime":"2013-06-12T12:31:19.861+0000"
+   "lastUpdateTime":"2013-06-12T12:31:19.861+0000",
+   "tenantId":null
 }</programlisting>
     </para>
     </section>
@@ -2073,7 +2115,8 @@
    "category":"Model category",
    "version":2,
    "metaInfo":"Model metainfo",
-   "deploymentId":"2"
+   "deploymentId":"2",
+   "tenantId":"updatedTenant"
 }</programlisting>
    所有请求参数都是可选的。比如，你可以只在请求体的JSON对象中包含'name'属性，只更新模型的名称，这样其他的字段都不会受到影响。如果显示包含了一个属性，并设置为null，模型值会被更新为null。比如：<literal>{"metaInfo" : null}</literal>会清空模型的metaInfo。
     </para>
@@ -2114,7 +2157,8 @@
    "deploymentId":"2",
    "deploymentUrl":"http://localhost:8182/repository/deployments/2",
    "createTime":"2013-06-12T12:31:19.861+0000",
-   "lastUpdateTime":"2013-06-12T12:31:19.861+0000"
+   "lastUpdateTime":"2013-06-12T12:31:19.861+0000",
+   "tenantId":""updatedTenant"
 }</programlisting>
     </para>
     </section>
@@ -2133,7 +2177,8 @@
    "category":"Model category",
    "version":1,
    "metaInfo":"Model metainfo",
-   "deploymentId":"2"
+   "deploymentId":"2",
+   "tenantId":"tenant"
 }</programlisting>
    All request values are optional. For example, you can only include the 'name' attribute in the request body JSON-object, only setting the name of the model, leaving all other fields null.
     </para>
@@ -2170,7 +2215,8 @@
    "deploymentId":"2",
    "deploymentUrl":"http://localhost:8182/repository/deployments/2",
    "createTime":"2013-06-12T12:31:19.861+0000",
-   "lastUpdateTime":"2013-06-12T12:31:19.861+0000"
+   "lastUpdateTime":"2013-06-12T12:31:19.861+0000",
+   "tenantId":"tenant"
 }</programlisting>
     </para>
     </section>
@@ -2529,7 +2575,8 @@
    "businessKey":"myBusinessKey",
    "suspended":false,
    "processDefinitionUrl":"http://localhost:8182/repository/process-definitions/processOne%3A1%3A4",
-   "activityId":"processTask"
+   "activityId":"processTask",
+   "tenantId": null
 }</programlisting>
     </para>
 </section>
@@ -2689,6 +2736,7 @@
 {
    "processDefinitionKey":"oneTaskProcess",
    "businessKey":"myBusinessKey",
+   "tenantId": "tenant1",
    "variables": [
       {
         "name":"myVar",
@@ -2703,8 +2751,9 @@
        <emphasis role="bold">请求体（使用message启动）：</emphasis>
             <programlisting>
 {
-   "processDefinitionKey":"newOrderMessage",
+   "message":"newOrderMessage",
    "businessKey":"myBusinessKey",
+   "tenantId": "tenant1",
    "variables": [
       {
         "name":"myVar",
@@ -2716,7 +2765,7 @@
 }</programlisting>
     </para>
     <para>
-	请求体中只能使用<literal>processDefinitionId</literal>，<literal>processDefinitionKey</literal>或<literal>message</literal>三者之一。<literal>businessKey</literal>和<literal>variables</literal>都是可选的。
+	请求体中只能使用<literal>processDefinitionId</literal>，<literal>processDefinitionKey</literal>或<literal>message</literal>三者之一。参数<literal>businessKey</literal>，<literal>variables</literal>和<literal>tenantId</literal>都是可选的。
 	可以在<link linkend="restVariables">REST变量章节</link>了解更多关于变量格式的信息。注意忽略变量作用域，流程变量总是<literal>local</literal>。
     </para>
         <para>
@@ -2751,7 +2800,8 @@
    "businessKey":"myBusinessKey",
    "suspended":false,
    "processDefinitionUrl":"http://localhost:8182/repository/process-definitions/processOne%3A1%3A4",
-   "activityId":"processTask"
+   "activityId":"processTask",
+   "tenantId" : null
 }</programlisting>
     </para>
 </section>
@@ -2835,10 +2885,28 @@
                     <entry>表示结果中包含流程变量。</entry>
                   </row>
                   <row>
+                    <entry>tenantId</entry>
+                    <entry>否</entry>
+                    <entry>String</entry>
+                    <entry>只返回指定tenantId的流程实例。</entry>
+                  </row>
+                 <row>
+                    <entry>tenantIdLike</entry>
+                    <entry>否</entry>
+                    <entry>String</entry>
+                    <entry>只返回与指定tenantId匹配的流程实例。</entry>
+                  </row>
+                  <row>
+                    <entry>withoutTenantId</entry>
+                    <entry>否</entry>
+                    <entry>Boolean</entry>
+                    <entry>如果为 <literal>true</literal>，只返回未设置tenantId的流程实例。如果为 <literal>false</literal>，会忽略 <literal>withoutTenantId</literal> 参数。</entry>
+                  </row>
+                  <row>
                     <entry>sort</entry>
                     <entry>否</entry>
                     <entry>String</entry>
-                    <entry>排序字段，应该为<literal>id</literal>（默认），<literal>processDefinitionId</literal> 或 <literal>processDefinitionKey</literal>三者之一。</entry>
+                    <entry>排序字段，应该为<literal>id</literal>（默认），<literal>processDefinitionId</literal>，<literal>tenantId</literal> 或 <literal>processDefinitionKey</literal>三者之一。</entry>
                   </row>
                   <row>
                     <entry namest="c1" nameend="c4"><para>可以使用通用的<link linkend="restPagingAndSort">分页和排序查询参数</link>。</para></entry>
@@ -2881,7 +2949,8 @@
          "businessKey":"myBusinessKey",
          "suspended":false,
          "processDefinitionUrl":"http://localhost:8182/repository/process-definitions/processOne%3A1%3A4",
-         "activityId":"processTask"
+         "activityId":"processTask",
+		 "tenantId" : null
       },
 
       ...
@@ -2955,7 +3024,8 @@
          "businessKey":"myBusinessKey",
          "suspended":false,
          "processDefinitionUrl":"http://localhost:8182/repository/process-definitions/processOne%3A1%3A4",
-         "activityId":"processTask"
+         "activityId":"processTask",
+		 "tenantId" : null
       },
 
       ...
@@ -3822,7 +3892,8 @@
    "processInstanceId":"5",
    "processInstanceUrl":"http://localhost:8182/runtime/process-instances/5",
    "suspended":false,
-   "activityId":null
+   "activityId":null,
+   "tenantId": null
 }</programlisting>
     </para>
   </section>
@@ -3923,7 +3994,8 @@
    "processInstanceId":"5",
    "processInstanceUrl":"http://localhost:8182/runtime/process-instances/5",
    "suspended":false,
-   "activityId":null
+   "activityId":null,
+   "tenantId" : null
 }</programlisting>
     </para>
   </section>
@@ -4052,11 +4124,29 @@
                     <entry>String</entry>
                     <entry>只返回指定分支直接下级的分支。</entry>
                   </row>
+                    <row>
+                    <entry>tenantId</entry>
+                    <entry>否</entry>
+                    <entry>String</entry>
+                    <entry>只返回指定tenantId的分支。</entry>
+                  </row>
+                 <row>
+                    <entry>tenantIdLike</entry>
+                    <entry>否</entry>
+                    <entry>String</entry>
+                    <entry>只返回与指定tenantId匹配的分支。</entry>
+                  </row>
+                  <row>
+                    <entry>withoutTenantId</entry>
+                    <entry>否</entry>
+                    <entry>Boolean</entry>
+                    <entry>如果为 <literal>true</literal>，只返回未设置tenantId的分支。如果为 <literal>false</literal>，会忽略 <literal>withoutTenantId</literal> 参数。</entry>
+                  </row>
                   <row>
                     <entry>sort</entry>
                     <entry>否</entry>
                     <entry>String</entry>
-                    <entry>排序字段，应该和<literal>processInstanceId</literal>（默认）， <literal>processDefinitionId</literal> 或 <literal>processDefinitionKey</literal>之一一起使用。</entry>
+                    <entry>排序字段，应该和<literal>processInstanceId</literal>（默认）， <literal>processDefinitionId</literal>， <literal>processDefinitionKey</literal>或<literal>tenantId</literal>之一一起使用。</entry>
                   </row>
                   <row>
                     <entry namest="c1" nameend="c4"><para>可以使用通用的 <link linkend="restPagingAndSort">分页和排序查询参数</link> 。</para></entry>
@@ -4101,7 +4191,8 @@
          "processInstanceId":"5",
          "processInstanceUrl":"http://localhost:8182/runtime/process-instances/5",
          "suspended":false,
-         "activityId":null
+         "activityId":null,
+		 "tenantId":null
       },
       {
          "id":"7",
@@ -4111,7 +4202,8 @@
          "processInstanceId":"5",
          "processInstanceUrl":"http://localhost:8182/runtime/process-instances/5",
          "suspended":false,
-         "activityId":"processTask"
+         "activityId":"processTask",
+		 "tenantId":null
       }
    ],
    "total":2,
@@ -4195,7 +4287,8 @@
          "processInstanceId":"5",
          "processInstanceUrl":"http://localhost:8182/runtime/process-instances/5",
          "suspended":false,
-         "activityId":null
+         "activityId":null,
+		 "tenantId":null
       },
       {
          "id":"7",
@@ -4205,7 +4298,8 @@
          "processInstanceId":"5",
          "processInstanceUrl":"http://localhost:8182/runtime/process-instances/5",
          "suspended":false,
-         "activityId":"processTask"
+         "activityId":"processTask",
+		 "tenantId":null
       }
    ],
    "total":2,
@@ -4805,7 +4899,8 @@
   "processInstance" : "http://localhost:8182/runtime/process-instances/5",
   "suspended" : false,
   "taskDefinitionKey" : "theTask",
-  "url" : "http://localhost:8182/runtime/tasks/8"
+  "url" : "http://localhost:8182/runtime/tasks/8",
+  "tenantId" : null
 }</programlisting>
       <itemizedlist>
           <listitem>
@@ -4877,7 +4972,7 @@
                   </row>
                   <row>
                     <entry>assigneeLike</entry>
-                    <entry>No</entry>
+                    <entry>否</entry>
                     <entry>String</entry>
                     <entry>只返回负责人与指定值匹配的任务。</entry>
                   </row>
@@ -4889,7 +4984,7 @@
                   </row>
                   <row>
                     <entry>ownerLike</entry>
-                    <entry>No</entry>
+                    <entry>否</entry>
                     <entry>String</entry>
                     <entry>只返回原拥有人与指定值匹配的任务。</entry>
                   </row>
@@ -5050,6 +5145,24 @@
                     <entry>表示在结果中包含变量。</entry>
                   </row>
                   <row>
+                    <entry>tenantId</entry>
+                    <entry>否</entry>
+                    <entry>String</entry>
+                    <entry>只返回指定tenantId的任务。</entry>
+                  </row>
+                 <row>
+                    <entry>tenantIdLike</entry>
+                    <entry>否</entry>
+                    <entry>String</entry>
+                    <entry>只返回与指定tenantId匹配的任务。</entry>
+                  </row>
+                  <row>
+                    <entry>withoutTenantId</entry>
+                    <entry>否</entry>
+                    <entry>Boolean</entry>
+                    <entry>如果为 <literal>true</literal>，只返回未设置tenantId的任务。如果为 <literal>false</literal>，会忽略 <literal>withoutTenantId</literal> 参数。</entry>
+                  </row>
+                  <row>
                     <entry namest="c1" nameend="c4"><para>可以使用通用的 <link linkend="restPagingAndSort">分页和排序查询参数</link> 。</para></entry>
                   </row>
                 </tbody>
@@ -5100,7 +5213,8 @@
       "processInstance" : "http://localhost:8182/runtime/process-instances/5",
       "suspended" : false,
       "taskDefinitionKey" : "theTask",
-      "url" : "http://localhost:8182/runtime/tasks/8"
+      "url" : "http://localhost:8182/runtime/tasks/8",
+	  "tenantId" : null
     }
   ],
   "total": 1,
@@ -5190,7 +5304,8 @@
       "processInstance" : "http://localhost:8182/runtime/process-instances/5",
       "suspended" : false,
       "taskDefinitionKey" : "theTask",
-      "url" : "http://localhost:8182/runtime/tasks/8"
+      "url" : "http://localhost:8182/runtime/tasks/8",
+	  "tenantId" : null
     }
   ],
   "total": 1,
@@ -5274,7 +5389,8 @@
   "action" : "claim",
   "assignee" : "userWhoClaims"
 }</programlisting>
-      指定assignee认领任务。assignee是必填项。
+      根据指定的assignee认领任务。如果assignee为<literal>null</literal>，任务的执行人会变成空，又可以重新认领了。
+
        </para>
        <para>
          <emphasis role="bold">代理任务 - JSON体：</emphasis>
@@ -7329,7 +7445,8 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
       "deleteReason" : null,
       "superProcessInstanceId" : "3",
       "url" : "http://localhost:8182/history/historic-process-instances/5",
-      "variables": null
+      "variables": null,
+	  "tenantId":null
     }
   ],
   "total": 1,
@@ -7443,6 +7560,24 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
                   <entry>表示是否应该返回历史流程实例变量。</entry>
                 </row>
                 <row>
+                    <entry>tenantId</entry>
+                    <entry>否</entry>
+                    <entry>String</entry>
+                    <entry>只返回指定tenantId的实例。</entry>
+                  </row>
+                 <row>
+                    <entry>tenantIdLike</entry>
+                    <entry>否</entry>
+                    <entry>String</entry>
+                    <entry>只返回与指定tenantId匹配的实例。</entry>
+                  </row>
+                  <row>
+                    <entry>withoutTenantId</entry>
+                    <entry>否</entry>
+                    <entry>Boolean</entry>
+                    <entry>如果为 <literal>true</literal>，只返回未设置tenantId的实例。如果为 <literal>false</literal>，会忽略 <literal>withoutTenantId</literal> 参数。</entry>
+                  </row>
+                <row>
                   <entry namest="c1" nameend="c4"><para>可以使用通用的 <link linkend="restPagingAndSort">分页和排序查询参数</link> 。</para></entry>
                 </row>
               </tbody>
@@ -7497,7 +7632,8 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
           "variableScope": "local",
           "value": "myTest"
         }
-      ]
+      ],
+	  "tenantId":null
     }
   ],
   "total": 1,
@@ -7582,7 +7718,8 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
           "variableScope": "local",
           "value": "myTest"
         }
-      ]
+      ],
+	  "tenantId":null
     }
   ],
   "total": 1,
@@ -7699,6 +7836,267 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
 	  响应体包含了变量的二进制值。当类型为 <literal>binary</literal>时，无论请求的accept-type头部设置了什么值，响应的content-type都为<literal>application/octet-stream</literal>。当类型为 <literal>serializable</literal>时， content-type为<literal>application/x-java-serialized-object</literal>。
     </para>
   </section>
+   <section>
+      <title>为历史流程实例创建一条新评论</title>
+        <para>
+          <programlisting>POST history/historic-process-instances/{processInstanceId}/comments</programlisting>
+        </para>
+        <para>
+            <table>
+              <title>为历史流程实例创建一条新评论 - URL参数</title>
+              <tgroup cols='3'>
+                <thead>
+                  <row>
+                    <entry>参数</entry>
+                    <entry>必须</entry>
+                    <entry>值</entry>
+                    <entry>描述</entry>
+                  </row>
+                </thead>
+                <tbody>
+                  <row>
+                    <entry>processInstanceId</entry>
+                    <entry>是</entry>
+                    <entry>String</entry>
+                    <entry>需要创建评论的流程实例id。</entry>
+                  </row>
+                </tbody>
+             </tgroup>
+          </table>
+        </para>
+         <para>
+       <emphasis role="bold">请求体：</emphasis>
+        <programlisting>
+{
+  "message" : "This is a comment."
+}</programlisting>
+        </para>
+        <para>
+          <emphasis role="bold">成功响应体：</emphasis>
+            <programlisting>
+{
+  "id" : "123",
+  "url" : "http://localhost:8081/activiti-rest/history/historic-process-instances/100/comments/123",
+  "message" : "This is a comment.",
+  "author" : "kermit"
+}</programlisting>
+          <table>
+              <title>为历史流程实例创建一条新评论 - 响应码</title>
+              <tgroup cols='2'>
+                <thead>
+                  <row>
+                    <entry>响应码</entry>
+                    <entry>描述</entry>
+                  </row>
+                </thead>
+                <tbody>
+                  <row>
+                    <entry>201</entry>
+                    <entry>表示创建了评论，并返回了结果。</entry>
+                  </row>
+                  <row>
+                    <entry>400</entry>
+                    <entry>表示请求中未包含评论。</entry>
+                  </row>
+                  <row>
+                    <entry>404</entry>
+                    <entry>表示找不到请求的历史流程实例。</entry>
+                  </row>
+                </tbody>
+             </tgroup>
+          </table>
+        </para>
+  </section>
+   <section>
+      <title>获得一个历史流程实例的所有评论</title>
+        <para>
+          <programlisting>GET history/historic-process-instances/{processInstanceId}/comments</programlisting>
+        </para>
+        <para>
+            <table>
+              <title>获得流程实例的所有评论 - URL参数</title>
+              <tgroup cols='3'>
+                <thead>
+                  <row>
+                    <entry>参数</entry>
+                    <entry>必填</entry>
+                    <entry>值</entry>
+                    <entry>描述</entry>
+                  </row>
+                </thead>
+                <tbody>
+                  <row>
+                    <entry>processInstanceId</entry>
+                    <entry>是</entry>
+                    <entry>String</entry>
+                    <entry>获取评论对应的流程实例id。</entry>
+                  </row>
+                </tbody>
+             </tgroup>
+          </table>
+        </para>
+        <para>
+          <emphasis role="bold">成功响应体：</emphasis>
+            <programlisting>
+[
+  {
+    "id" : "123",
+    "url" : "http://localhost:8081/activiti-rest/service/history/historic-process-instances/100/comments/123",
+    "message" : "This is a comment",
+    "author" : "kermit"
+  },
+  {
+    "id" : "456",
+    "url" : "http://localhost:8081/activiti-rest/service/history/historic-process-instances/100/comments/456",
+    "message" : "This is a否ther comment.",
+    "author" : "gonzo"
+  }
+]</programlisting>
+          <table>
+              <title>获得流程实例的所有评论 - 响应码</title>
+              <tgroup cols='2'>
+                <thead>
+                  <row>
+                    <entry>响应码</entry>
+                    <entry>描述</entry>
+                  </row>
+                </thead>
+                <tbody>
+                  <row>
+                    <entry>200</entry>
+                    <entry>表示找到了流程实例，并返回了评论。</entry>
+                  </row>
+                  <row>
+                    <entry>404</entry>
+                    <entry>表示找不到请求的流程实例。</entry>
+                  </row>
+                </tbody>
+             </tgroup>
+          </table>
+        </para>
+  </section>
+   <section>
+      <title>获得历史流程实例的一条评论</title>
+        <para>
+          <programlisting>GET history/historic-process-instances/{processInstanceId}/comments/{commentId}</programlisting>
+        </para>
+        <para>
+            <table>
+              <title>获得历史流程的一条评论 - URL参数</title>
+              <tgroup cols='3'>
+                <thead>
+                  <row>
+                    <entry>参数</entry>
+                    <entry>必填</entry>
+                    <entry>值</entry>
+                    <entry>描述</entry>
+                  </row>
+                </thead>
+                <tbody>
+                  <row>
+                    <entry>processInstanceId</entry>
+                    <entry>是</entry>
+                    <entry>String</entry>
+                    <entry>获得评论对应的历史流程实例。</entry>
+                  </row>
+                  <row>
+                    <entry>commentId</entry>
+                    <entry>Yes</entry>
+                    <entry>String</entry>
+                    <entry>评论的id。</entry>
+                  </row>
+                </tbody>
+             </tgroup>
+          </table>
+        </para>
+        <para>
+          <emphasis role="bold">成功响应体：</emphasis>
+            <programlisting>
+{
+  "id" : "123",
+  "url" : "http://localhost:8081/activiti-rest/history/historic-process-instances/100/comments/123",
+  "message" : "This is a comment.",
+  "author" : "kermit"
+}</programlisting>
+          <table>
+              <title>获得历史流程的一条评论 - 响应码</title>
+              <tgroup cols='2'>
+                <thead>
+                  <row>
+                    <entry>响应码</entry>
+                    <entry>描述</entry>
+                  </row>
+                </thead>
+                <tbody>
+                  <row>
+                    <entry>200</entry>
+                    <entry>表示找到了历史流程实例和评论，并返回了评论。</entry>
+                  </row>
+                  <row>
+                    <entry>404</entry>
+                    <entry>表示找不到请求的历史流程实例，或历史流程实例不包含指定id的评论。</entry>
+                  </row>
+                </tbody>
+             </tgroup>
+          </table>
+        </para>
+  </section>
+  <section>
+      <title>删除历史流程实例的一条评论</title>
+        <para>
+          <programlisting>DELETE history/historic-process-instances/{processInstanceId}/comments/{commentId}</programlisting>
+        </para>
+        <para>
+            <table>
+              <title>删除历史流程实例的一条评论 - URL参数</title>
+              <tgroup cols='3'>
+                <thead>
+                  <row>
+                    <entry>参数</entry>
+                    <entry>必填</entry>
+                    <entry>值</entry>
+                    <entry>描述</entry>
+                  </row>
+                </thead>
+                <tbody>
+                  <row>
+                    <entry>processInstanceId</entry>
+                    <entry>是</entry>
+                    <entry>String</entry>
+                    <entry>需要删除的评论对应的历史流程实例的id。</entry>
+                  </row>
+                  <row>
+                    <entry>commentId</entry>
+                    <entry>Yes</entry>
+                    <entry>String</entry>
+                    <entry>评论的id。</entry>
+                  </row>
+                </tbody>
+             </tgroup>
+          </table>
+        </para>
+        <table>
+            <title>删除历史流程实例的一条评论 - 响应码</title>
+            <tgroup cols='2'>
+              <thead>
+                <row>
+                  <entry>响应码</entry>
+                  <entry>描述</entry>
+                </row>
+              </thead>
+              <tbody>
+                <row>
+                  <entry>204</entry>
+                  <entry>表示找到了历史流程实例，并删除了评论。响应体为空。</entry>
+                </row>
+                <row>
+                  <entry>404</entry>
+                  <entry>表示找不到请求的历史流程实例，或历史流程实例不包含指定id的评论。</entry>
+                </row>
+              </tbody>
+           </tgroup>
+        </table>
+  </section>
     <section>
     <title>获得单独历史任务实例</title>
     <para>
@@ -7753,7 +8151,8 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
   "dueDate" : "2013-04-20T12:11:13.134+0000",
   "parentTaskId" : null,
   "url" : "http://localhost:8182/history/historic-task-instances/5",
-  "variables": null
+  "variables": null,
+  "tenantId":null
 }</programlisting>
       </para>
     </section>
@@ -7962,19 +8361,19 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
                   <entry>只返回没有设置持续时间的历史任务实例。当设置为<literal>false</literal>时会忽略这个参数。</entry>
                 </row>
                 <row>
-                  <entry>completedOn</entry>
+                  <entry>taskCompletedOn</entry>
                   <entry>否</entry>
                   <entry>Date</entry>
                   <entry>只返回在指定时间完成的历史任务实例。</entry>
                 </row>
                 <row>
-                  <entry>completedAfter</entry>
+                  <entry>taskCompletedAfter</entry>
                   <entry>否</entry>
                   <entry>Date</entry>
                   <entry>只返回在指定时间之后完成的历史任务实例。</entry>
                 </row>
                 <row>
-                  <entry>completedBefore</entry>
+                  <entry>taskCompletedBefore</entry>
                   <entry>否</entry>
                   <entry>Date</entry>
                   <entry>只返回在指定时间之前完成的历史任务实例。</entry>
@@ -8009,6 +8408,24 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
                   <entry>Boolean</entry>
                   <entry>表示是否应该返回历史任务实例全局变量。</entry>
                 </row>
+                <row>
+                    <entry>tenantId</entry>
+                    <entry>否</entry>
+                    <entry>String</entry>
+                    <entry>只返回指定tenantId的历史任务。</entry>
+                  </row>
+                 <row>
+                    <entry>tenantIdLike</entry>
+                    <entry>否</entry>
+                    <entry>String</entry>
+                    <entry>只返回与指定tenantId匹配的历史任务。</entry>
+                  </row>
+                  <row>
+                    <entry>withoutTenantId</entry>
+                    <entry>否</entry>
+                    <entry>Boolean</entry>
+                    <entry>如果为 <literal>true</literal>，只返回未设置tenantId的历史任务。如果为 <literal>false</literal>，会忽略 <literal>withoutTenantId</literal> 参数。</entry>
+                  </row>
                 <row>
                   <entry namest="c1" nameend="c4"><para>可以使用通用的 <link linkend="restPagingAndSort">分页和排序查询参数</link> 。</para></entry>
                 </row>
@@ -8080,7 +8497,8 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
           "variableScope": "global",
           "value": "myProcessTest"
         }
-      ]
+      ],
+	  "tenantId":null
     }
   ],
   "total": 1,
@@ -8371,6 +8789,24 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
                   <entry>历史活动实例的流程定义id。</entry>
                 </row>
                 <row>
+                    <entry>tenantId</entry>
+                    <entry>否</entry>
+                    <entry>String</entry>
+                    <entry>只返回指定tenantId的实例。</entry>
+                  </row>
+                 <row>
+                    <entry>tenantIdLike</entry>
+                    <entry>否</entry>
+                    <entry>String</entry>
+                    <entry>只返回与指定tenantId匹配的实例</entry>
+                  </row>
+                  <row>
+                    <entry>withoutTenantId</entry>
+                    <entry>否</entry>
+                    <entry>Boolean</entry>
+                    <entry>如果为 <literal>true</literal>，只返回未设置tenantId的历史。如果为 <literal>false</literal>，会忽略 <literal>withoutTenantId</literal> 参数。</entry>
+                  </row>
+                <row>
                   <entry namest="c1" nameend="c4"><para>可以使用通用的 <link linkend="restPagingAndSort">分页和排序查询参数</link> 。</para></entry>
                 </row>
               </tbody>
@@ -8420,7 +8856,8 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
       "assignee" : "fozzie",
       "startTime" : "2013-04-17T10:17:43.902+0000",
       "endTime" : "2013-04-18T14:06:32.715+0000",
-      "durationInMillis" : 86400056
+      "durationInMillis" : 86400056,
+	  "tenantId":null
     }
   ],
   "total": 1,
@@ -8489,7 +8926,8 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
       "assignee" : "fozzie",
       "startTime" : "2013-04-17T10:17:43.902+0000",
       "endTime" : "2013-04-18T14:06:32.715+0000",
-      "durationInMillis" : 86400056
+      "durationInMillis" : 86400056,
+	  "tenantId":null
     }
   ],
   "total": 1,
@@ -9483,6 +9921,93 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         </para>
   </section>
  </section>
+<section>
+  <title>运行时</title>
+  <section>
+      <title>接收信号事件</title>
+        <para>
+          <programlisting>POST runtime/signals</programlisting>
+        </para>
+        <para>
+        提醒引擎，接收了一个信号事件，不会特别针对某个流程。
+        </para>
+        <para>
+         <emphasis role="bold">JSON体：</emphasis>
+           <programlisting>
+{
+  "signalName": "My Signal",
+  "tenantId" : "execute",
+  "async": true,
+  "variables": [
+      {"name": "testVar", "value": "This is a string"},
+      ...
+  ]
+}</programlisting>
+        <table>
+              <title>接收信号事件 - JSON体参数</title>
+              <tgroup cols='2'>
+                <thead>
+                  <row>
+                    <entry>参数</entry>
+                    <entry>描述</entry>
+                    <entry>必填</entry>
+                  </row>
+                </thead>
+                <tbody>
+                  <row>
+                    <entry>signalName</entry>
+                    <entry>signal的名称</entry>
+                    <entry>是</entry>
+                  </row>
+                  <row>
+                    <entry>tenantId</entry>
+                    <entry>信号事件应该执行在的tenantId</entry>
+                    <entry>否</entry>
+                  </row>
+                  <row>
+                    <entry>async</entry>
+                    <entry>如果为 <literal>true</literal>，处理信号应该是异步的。返回码为 <literal>202 - Accepted</literal> 表示请求已接受，但尚未执行。如果为 <literal>false</literal>，会立即处理信号，结果为 (<literal>200 - OK</literal>) 会在成功完成后返回。如果忽略，默认为 <literal>false</literal> 。</entry>
+                    <entry>否</entry>
+                  </row>
+                  <row>
+                    <entry>variables</entry>
+                    <entry>变量数组（通用的参数格式）用来向信号传递载荷。不能把 <literal>async</literal> 设置为 <literal>true</literal>，它会导致返回错误。</entry>
+                    <entry>否</entry>
+                  </row>
+                </tbody>
+             </tgroup>
+          </table>
+        </para>
+        <para>
+          <emphasis role="bold">成功响应体：</emphasis>
+          <table>
+              <title>接收信号事件 - 响应码</title>
+              <tgroup cols='2'>
+                <thead>
+                  <row>
+                    <entry>响应码</entry>
+                    <entry>描述</entry>
+                  </row>
+                </thead>
+                <tbody>
+                  <row>
+                    <entry>200</entry>
+                    <entry>表示已经处理了信号，没有发生错误。</entry>
+                  </row>
+                  <row>
+                    <entry>202</entry>
+                    <entry>表示信号处理已经进入一个异步作业的队列，准备执行了。</entry>
+                  </row>
+                  <row>
+                    <entry>400</entry>
+                    <entry>信号没有处理。缺少信号名，或同时使用了变量和异步，这是不允许的。响应体包含了错误的额外信息。</entry>
+                  </row>
+                </tbody>
+             </tgroup>
+          </table>
+        </para>
+  </section>
+ </section>
 
 
 <section>
@@ -9529,7 +10054,8 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
    "executionUrl":"http://localhost:8182/runtime/executions/7",
    "retries":3,
    "exceptionMessage":null,
-   "dueDate":"2013-06-04T22:05:05.474+0000"
+   "dueDate":"2013-06-04T22:05:05.474+0000",
+   "tenantId":null
 }</programlisting>
           <table>
               <title>获取一个作业 - 响应码</title>
@@ -9797,8 +10323,26 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
                     <entry>String</entry>
                   </row>
                   <row>
+                    <entry>tenantId</entry>
+                    <entry>否</entry>
+                    <entry>String</entry>
+                    <entry>只返回指定tenantId的作业。</entry>
+                  </row>
+                 <row>
+                    <entry>tenantIdLike</entry>
+                    <entry>否</entry>
+                    <entry>String</entry>
+                    <entry>只返回与指定tenantId匹配的作业。</entry>
+                  </row>
+                  <row>
+                    <entry>withoutTenantId</entry>
+                    <entry>否</entry>
+                    <entry>Boolean</entry>
+                    <entry>如果为 <literal>true</literal>，只返回未设置tenantId的作业。如果为 <literal>false</literal>，会忽略 <literal>withoutTenantId</literal> 参数。</entry>
+                  </row>
+                  <row>
                     <entry>sort</entry>
-                    <entry>对结果进行排序的字段，可以是 <literal>id</literal>, <literal>dueDate</literal>, <literal>executionId</literal>, <literal>processInstanceId</literal> 或 <literal>retries</literal>其中之一。</entry>
+                    <entry>对结果进行排序的字段，可以是 <literal>id</literal>, <literal>dueDate</literal>, <literal>executionId</literal>, <literal>processInstanceId</literal>， <literal>retries</literal>或<literal>tenantId</literal>其中之一。</entry>
                     <entry>String</entry>
                   </row>
                   <row>

@@ -168,6 +168,279 @@ public class CustomUserTaskBpmnParseHandler extends ServiceTaskParseHandler {
 
 	</section>
 
+	<section id="advanced.tenancy">
+
+	   <title>多租户</title>
+
+	   <para>
+		   多租户通常是在软件需要为多个不同组织服务时产生的概念。
+		   关键是数据分片，组织不能看到其他组织的数据。
+		   这种场景下，组织（或部门，或小组，或。。。）就叫做 <emphasis>租户</emphasis>。
+	   </para>
+
+	   <para>
+		   注意它和安装多个实例是从基本上不同的，这是一个activiti流程引擎实例为每个组织分别运行
+		   （对应不同的数据库表）。虽然activiti是轻量级的，
+		   运行流程引擎不会消耗很多资源，但是它还是增加了复杂性，并需要更多维护工作。
+		   但是，对一些场景，可能也是正确的解决方案。
+   </para>
+
+	   <para>
+	      activiti的多租户主要围绕着数据分片来实现。很重要的一点是，
+		  <emphasis role="bod">Activiti没有强行校验多租户的规则</emphasis>。
+		  这意味着不会校验，查询和使用数据时用户是否使用了正确的租户。
+		  这应该由activiti引擎的调用者一层负责完成。
+		  activiti只确认租户信息会被保存，并在查询流程数据时会被用到。
+	   </para>
+
+	   <para>
+	       在向activiti流程引擎发布流程定义时，可能需要传递一个<emphasis>租户标识</emphasis>。
+		   它是一个字符串（比如，UUID，部门ID，等等），限制在256字符内，租户的唯一标识。
+	       <programlisting>
+ repositoryService.createDeployment()
+            .addClassPathResource(...)
+            .tenantId("myTenantId")
+            .deploy();</programlisting>
+	       通过部署传递租户id有以下含义：
+		   <itemizedlist>
+	        <listitem>
+	           <para>
+	               所有包含在部署中的流程定义都会继承部署的tenantId。
+	           </para>
+	        </listitem>
+	        <listitem>
+               <para>
+                    所有从这些流程定义发起的流程实例，都会继承流程定义的tenantId。
+               </para>
+            </listitem>
+            <listitem>
+               <para>
+                    所有流程实例运行阶段创建的任务都会继承流程实例的tenantId。
+					单独运行的task也可以包含tenantId。
+               </para>
+            </listitem>
+            <listitem>
+               <para>
+                    所有流程实例运行阶段创建的分支都会继承流程实例的tenantId。
+               </para>
+            </listitem>
+            <listitem>
+               <para>
+                    触发一个信号抛出事件（在流程本身或通过API）可以通过tenantId实现。
+					信号指挥在租户环境下执行：比如，如果有多个信号捕获事件，并且名字相同，
+					实际只有正确的tenantId下的事件会被调用。
+               </para>
+            </listitem>
+            <listitem>
+               <para>
+                    所有作业（定时器，异步调用）会集成tenantId，或者来自流程定义（比如定时开始事件），
+					或流程实例（运行期创建的作业，比如异步调用）。这样其实潜在的可以支持
+					为一些租户指定不同优先级的自定义jobExecutor。
+               </para>
+            </listitem>
+            <listitem>
+               <para>
+                    所有历史实体（历史流程实例，任务和节点）会从它们对应的运行状态集成tenantId。
+               </para>
+            </listitem>
+            <listitem>
+               <para>
+                    作为单独的一部分，model也可以设置tenantId（model用来存储Activiti modeler设计的bpmn 2.0模型）。
+               </para>
+            </listitem>
+	      </itemizedlist>
+	   </para>
+
+	   <para>
+	       为了确实为流程数据使用tenantId，所有的查询API都可以通过tenantId进行查询。
+		   比如（可以使用其他的实体的对应查询实现替换）：
+	       <programlisting>
+runtimeService.createProcessInstanceQuery()
+    <emphasis role="bold">.processInstanceTenantId("myTenantId")</emphasis>
+    .processDefinitionKey("myProcessDefinitionKey")
+    .variableValueEquals("myVar", "someValue")
+    .list()</programlisting>
+        查询API也允许对tenantId使用<emphasis>like</emphasis>语法，
+		也可以过滤未设置tenantId的实体。
+	   </para>
+
+	   <para>
+        <emphasis role="bold">重要的实现细节：</emphasis> 因为数据库的限制（特指：处理null的唯一校验）
+		<emphasis>默认</emphasis>的表示<emphasis>未设置租户</emphasis>的tenantId的值是<emphasis role="bold">空字符串</emphasis>。
+		（流程定义key，流程定义version，tenantId）的组合应该是唯一的（有一个数据库约束校验这个规则）。
+		也要注意tenantId不应设置为null，它会影响一些数据库（Oracle）的查询，它把空字符串当做null处理。
+		（这也是为什么<emphasis>.withoutTenantId</emphasis>查询会检查空字符串或null）。
+		这意味着相同的流程定义（流程定义key相同）可以部署到不同的租户下，可以拥有各自的八本。
+		当不使用租户时也不会影响使用。
+       </para>
+
+	   <para>
+	       <emphasis role="bold">注意上面介绍的所有内容都不会影响Activiti在集群环境下运行。</emphasis>
+	   </para>
+
+	   <para>
+	       [试验项目] 可以通过调用<emphasis>repositoryService</emphasis>的
+		   <emphasis>changeDeploymentTenantId(String deploymentId, String newTenantId)</emphasis>修改tenantId。
+		   它会修改之前继承的所有tenantId。
+		   当我们从非多租户环境向多租户环境下切换时，就会非常实用了。
+		   参考方法的javadoc获得更多细节信息。
+	   </para>
+
+	</section>
+
+	<section id="advanced.custom.sql.queries">
+
+	   <title>执行自定义SQL</title>
+
+	   <para>
+	       Activiti API允许使用高级API操作数据库。比如，在查询数据方面，查询API和Native Query API是非常强大的。
+		   然而，对于某些情况，它们还是不够轻便。
+		   下面的章节描述了如何使用完全自定义的SQL语句（select, insert, update和delete）
+		   可以执行在Activiti的数据存储之上，但是完全又是配置在流程引擎中的
+		   （比如使用事务）。
+	   </para>
+
+	   <para>
+	       为了使用自定义SQL，activiti引擎使用下层框架的功能，MyBatis。
+		   使用自定义SQL的第一件事，要创建MyBatis映射类。可以阅读
+		   <ulink url="http://mybatis.github.io/mybatis-3/java-api.html">MyBatis用户手册</ulink>了解更多信息。
+		   比如，假设不需要全部的任务数据，只需要其中的一小部分。
+		   可以使用Mapper实现，如下：
+	       <programlisting>
+public interface MyTestMapper {
+
+    @Select(&quot;SELECT ID_ as id, NAME_ as name, CREATE_TIME_ as createTime FROM ACT_RU_TASK&quot;)
+    List&lt;Map&lt;String, Object&gt;&gt; selectTasks();
+
+}</programlisting>
+			这个mapper需要像下面这样设置到流程引擎配置中：
+            <programlisting>
+...
+&lt;property name="customMybatisMappers"&gt;
+  &lt;set&gt;
+    &lt;value&gt;org.activiti.standalone.cfg.MyTestMapper&lt;/value&gt;
+  &lt;/set&gt;
+&lt;/property&gt;
+...</programlisting>
+            注意，这是一个接口。MyBatis框架会在运行阶段为它创建一个实例。
+			还要注意返回值是没有类型的，
+			但是map的list（和对应的行列对应）。
+			如果需要也可以使用MyBatis映射。
+	   </para>
+
+	   <para>
+	       为了执行上面的查询，可以使用<emphasis>managementService.executeCustomSql</emphasis>方法.
+		   这个方法需要一个<emphasis>CustomSqlExecution</emphasis>实体。
+		   只是一个封装类，隐藏了引擎的内部实现所需执行的信息。
+	   </para>
+
+	   <para>
+	       不幸的是，java泛型让它有点儿不易阅读。下面的两个泛型是mapper类和返回类型类。
+		   然而，真实的落实是简单调用mapper方法
+		   并返回结果（如果有对应的话）。
+	       <programlisting>
+CustomSqlExecution&lt;MyTestMapper, List&lt;Map&lt;String, Object&gt;&gt;&gt; customSqlExecution =
+          new AbstractCustomSqlExecution&lt;MyTestMapper, List&lt;Map&lt;String, Object&gt;&gt;&gt;(MyTestMapper.class) {
+
+  public List&lt;Map&lt;String, Object&gt;&gt; execute(MyTestMapper customMapper) {
+    return customMapper.selectTasks();
+  }
+
+};
+
+List&lt;Map&lt;String, Object&gt;&gt; results = managementService.executeCustomSql(customSqlExecution);</programlisting>
+	       上面list中的Map只包含<emphasis>id, name 和 create time</emphasis>，不是全部的任务对象。
+	   </para>
+
+	   <para>
+	       使用上面的方式可以执行任何SQL。另一个更复杂的例子：
+	       <programlisting>
+    @Select({
+        &quot;SELECT task.ID_ as taskId, variable.LONG_ as variableValue FROM ACT_RU_VARIABLE variable&quot;,
+        &quot;inner join ACT_RU_TASK task on variable.TASK_ID_ = task.ID_&quot;,
+        &quot;where variable.NAME_ = #{variableName}&quot;
+    })
+    List&lt;Map&lt;String, Object&gt;&gt; selectTaskWithSpecificVariable(String variableName);
+	       </programlisting>
+	       使用这种方法，任务表会与变量表关联。只会获得对应名称的变量，
+		   任务id和对应的数字值会被返回。
+	   </para>
+
+	</section>
+
+	<section id="advanced.process.engine.configurators">
+
+	   <title>使用ProcessEngineConfigurator实现高级流程引擎配置</title>
+
+	   <para>
+	       可以使用<emphasis>ProcessEngineConfigurator</emphasis>实现一种高级的扩展流程引擎的配置。
+		   想法是创建一个<emphasis>org.activiti.engine.cfg.ProcessEngineConfigurator</emphasis>接口的实现，
+		   注入到流程引擎配置里：
+	       <programlisting>
+&lt;bean id=&quot;processEngineConfiguration&quot; class=&quot;...SomeProcessEngineConfigurationClass&quot;&gt;
+
+    ...
+
+    &lt;property name=&quot;configurators&quot;&gt;
+        &lt;list&gt;
+            &lt;bean class=&quot;com.mycompany.MyConfigurator&quot;&gt;
+                ...
+            &lt;/bean&gt;
+        &lt;/list&gt;
+    &lt;/property&gt;
+
+    ...
+
+&lt;/bean&gt;
+	       </programlisting>
+	   </para>
+
+	   <para>
+	       实现这个接口需要实现两个方法。<emphasis>configure</emphasis>方法，
+		   把<emphasis>ProcessEngineConfiguration</emphasis>作为参数。
+		   可以通过这种方法添加自定义配置，这个方法会被保证调用到，
+		   <emphasis role="bold">在流程创建之前，但在所有默认配置执行之前</emphasis>。
+		   另一个发那个发是<emphasis>getPriority</emphasis>方法，允许对configurator进行排序，
+		   如果一些configurator依赖其他的时候。
+	   </para>
+
+	   <para>
+            一个configurator的实例是<link linkend="chapter_ldap">LDAP 集成</link>，
+			这个configurator用来替换默认的user和group管理器类，使用处理LDAP用户存储的类。
+			所以基本上一个configurator允许很大程度上修改或增强流程引擎，
+			对非常高级的场景是很有用的。另一个例子是使用自定义的版本替换流程定义缓存：
+            <programlisting>
+public class ProcessDefinitionCacheConfigurator extends AbstractProcessEngineConfigurator {
+
+    public void configure(ProcessEngineConfigurationImpl processEngineConfiguration) {
+            MyCache myCache = new MyCache();
+            processEngineConfiguration.setProcessDefinitionCache(enterpriseProcessDefinitionCache);
+    }
+
+}</programlisting>
+	   </para>
+
+	   <para>
+            流程引擎配置器也可以通过
+			<ulink url="http://docs.oracle.com/javase/7/docs/api/java/util/ServiceLoader.html">ServiceLoader</ulink>自动从classpath中加载。
+			就是说，放在jar中的configurator实现必须放在classpath下，
+			并在jar的<emphasis>META-INF/services</emphasis>目录下包含一个<emphasis role="bold">org.activiti.engine.cfg.ProcessEngineConfigurator</emphasis>文件。
+			文件的内容是自定义实现的全类名。
+			当流程引擎启动时，日志会显示找到了哪些configurator：
+            <programlisting>
+INFO  org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl  - Found 1 auto-discoverable Process Engine Configurators
+INFO  org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl  - Found 1 Process Engine Configurators in total:
+INFO  org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl  - class org.activiti.MyCustomConfigurator</programlisting>
+	   </para>
+
+	   <para>
+	       注意，这种ServiceLoader的方式在某些环境下可能无法正常运行。
+		   可以使用ProcessEngineConfiguration的<emphasis>enableConfiguratorServiceLoader</emphasis>属性来禁用这个功能。
+		   （默认为true）。
+	   </para>
+
+	</section>
+
 	<section id="advanced.safe.bpmn.xml">
 
 	   <title>启用安全的BPMN 2.0 xml</title>

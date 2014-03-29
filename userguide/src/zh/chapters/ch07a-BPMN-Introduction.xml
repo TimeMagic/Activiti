@@ -107,7 +107,9 @@ xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL
       <title>前提</title>
 
       <para>
-	    教程假设你已经<link linkend="demo.setup.one.minute.version">能安装并运行Activiti demo</link>
+	    教程假设你已经<link linkend="demo.setup.one.minute.version">能安装并运行Activiti demo</link>，
+		并且你使用了独立运行的H2服务器。修改<literal>db.properties</literal>，设置其中的
+		<literal>jdbc.url=jdbc:h2:tcp://localhost/activiti</literal>，然后根据<ulink url="http://www.h2database.com/html/tutorial.html#using_server">H2的文档</ulink>启动独立服务器。
       </para>
 
     </section>
@@ -375,8 +377,9 @@ List&lt;Task&gt; tasks = taskService.createTaskQuery().taskCandidateGroup(&quot;
 
       <para>
 	    因为我们配置的<literal>ProcessEngine</literal>使用了与demo相同的数据，
-		我们可以登录到<ulink url="http://localhost:8080/activiti-explorer/">Activiti Explorer</ulink>
-		（使用fozzie//fozzie登录），然后可以启动业务流程，
+		我们可以登录到<ulink url="http://localhost:8080/activiti-explorer/">Activiti Explorer</ulink>。
+		默认，<emphasis>accountancy（会计）</emphasis>组里没有任何人。使用kermit/kermit登录，点击组，并创建一个新组。
+		然后点击用户，把组分配给fozzie。现在使用fozzie/fozzie登录，现在我们就可以启动我们的业务流程了，
 		选择<emphasis>Processes</emphasis>页，在<emphasis>'月度财报'</emphasis>的<emphasis>'操作'</emphasis>列
 		点击<emphasis>'启动流程'</emphasis>。
 

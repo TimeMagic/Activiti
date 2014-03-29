@@ -286,6 +286,7 @@ RuntimeService.signalEventReceived(String signalName, String executionId);
 	    </section>
 	    <section id="bpmnSignalEventDefinitionQuery">
 	    	<title>查询信号事件的订阅</title>
+			<para>
 			可以查询所有订阅了特定信号事件的执行：
 	    	<programlisting>
  List&lt;Execution&gt; executions = runtimeService.createExecutionQuery()
@@ -294,6 +295,27 @@ RuntimeService.signalEventReceived(String signalName, String executionId);
 	    	</programlisting>
 			我们可以使用<code>signalEventReceived(String signalName, String executionId)</code>方法
 			吧信号发送给这些执行。
+			</para>
+	    </section>
+
+	    <section id="bpmnSignalEventDefinitionScope">
+	       <title>信号事件范围</title>
+	       <para>
+			   默认，信号会在<emphasis>流程引擎范围内进行广播</emphasis>。就是说，
+			   你可以在一个流程实例中抛出一个信号事件，其他不同流程定义的流程实例
+			   都可以监听到这个事件。
+	       </para>
+	       <para>
+				然而，有时只希望在<emphasis>同一个流程实例</emphasis>中响应这个信号事件。
+				比如一个场景是，流程实例中的同步机制，如果两个或更多活动是互斥的。
+	       </para>
+	       <para>
+			   如果想要限制信号事件的<emphasis>范围</emphasis>，可以使用信号事件定义的<emphasis>scope 属性</emphasis>
+			   （不是BPMN2.0的标准属性）：
+	           <programlisting>
+&lt;signal id=&quot;alertSignal&quot; name=&quot;alert&quot; activiti:scope&quot;processInstance&quot;/&gt;</programlisting>
+	           The default value for this is attribute is <emphasis>&quot;global&quot;</emphasis>.
+	       </para>
 	    </section>
 
 	    <section id="bpmnSignalEventDefinitionExample">
@@ -350,7 +372,7 @@ RuntimeService.signalEventReceived(String signalName, String executionId);
 
         <para>
 			消息事件定义使用<code>messageEventDefinition</code>元素。
-			<code>messaageRef</code>属性引用了<code>definitions</code>根节点下的
+			<code>messageRef</code>属性引用了<code>definitions</code>根节点下的
 			一个<code>message</code>子元素。下面是一个使用两个消息事件的流程例子，
 			开始事件和中间捕获事件分别声明和引用了两个消息事件。
 <programlisting>
@@ -775,6 +797,73 @@ ProcessInstance startProcessInstanceByMessage(String messageName, String busines
   &lt;/process&gt;
 
 &lt;/definitions&gt;</programlisting>
+
+        </para>
+
+
+      </section>
+
+        </section>
+
+
+
+        <!-- //////////////////////////////////////// signal start events -->
+
+        <section id="bpmnSignalStartEvent">
+
+            <title>信号开始事件</title>
+            <section id="bpmnSignalStartEventDescription">
+
+            <title>描述</title>
+
+            <para>
+                <link linkend="bpmnSignalEventDefinition">signal</link>开始事件，可以用来通过一个已命名的信号（signal）来启动一个流程实例。
+				信号可以在流程实例内部使用“中间信号抛出事务”触发，
+				也可以通过API(<emphasis>runtimService.signalEventReceivedXXX</emphasis> 方法)触发。两种情况下，
+				所有流程实例中拥有相同名称的signalStartEvent都会启动。
+            </para>
+
+            <para>
+                注意，在两种情况下，都可以选择同步或异步的方式启动流程实例。
+            </para>
+
+            <para>
+                必须向API传入<code>signalName</code>， 这是<code>signal</code>元素的<code>name</code>属性值，
+				它会被<code>signalEventDefinition</code>的<code>signalRef</code>属性引用。
+            </para>
+
+          </section>
+
+            <section id="signalStartEventGraphicalNotation">
+
+              <title>图形标记</title>
+
+              <para>
+			    信号开始事件显示为一个中间包含信号事件图标的圆圈。标记是无填充的，表示捕获（接收）行为。
+                <mediaobject><imageobject><imagedata align="center" fileref="images/bpmn.start.signal.event.png"/></imageobject></mediaobject>
+              </para>
+
+            </section>
+
+            <section id="signalStartEventXml">
+
+        <title>XML格式</title>
+
+        <para>
+		  signalStartEvent的XML格式是标准的startEvent声明，其中包含一个signalEventDefinition子元素：
+
+          <programlisting>
+    &lt;signal id=&quot;theSignal&quot; name=&quot;The Signal&quot; /&gt;
+
+    &lt;process id=&quot;processWithSignalStart1&quot;&gt;
+        &lt;startEvent id=&quot;theStart&quot;&gt;
+          &lt;signalEventDefinition id=&quot;theSignalEventDefinition&quot; signalRef=&quot;theSignal&quot;  /&gt;
+        &lt;/startEvent&gt;
+        &lt;sequenceFlow id=&quot;flow1&quot; sourceRef=&quot;theStart&quot; targetRef=&quot;theTask&quot; /&gt;
+        &lt;userTask id=&quot;theTask&quot; name=&quot;Task in process A&quot; /&gt;
+        &lt;sequenceFlow id=&quot;flow2&quot; sourceRef=&quot;theTask&quot; targetRef=&quot;theEnd&quot; /&gt;
+        &lt;endEvent id=&quot;theEnd&quot; /&gt;
+    &lt;/process&gt;</programlisting>
 
         </para>
 
@@ -3399,8 +3488,8 @@ public class ThrowBpmnErrorDelegate implements JavaDelegate {
   public void execute(DelegateExecution execution) throws Exception {
     try {
       executeBusinessLogic();
-    } catch (BusinessExeption e) {
-      throw new BpmnError(&quot;BusinessExeptionOccured&quot;);
+    } catch (BusinessException e) {
+      throw new BpmnError(&quot;BusinessExceptionOccured&quot;);
     }
   }
 
@@ -3862,6 +3951,11 @@ public class StartProcessInstanceTestDelegateWithInjection {
                 <entry>如果服务器需要</entry>
                 <entry>一些邮件服务器需要ssl交互。默认为false。</entry>
               </row>
+              <row>
+                <entry>mailServerUseTLS</entry>
+                <entry>如果服务器需要</entry>
+                <entry>一些邮件服务器（比如gmail）需要支持TLS。默认为false。</entry>
+              </row>
             </tbody>
             </tgroup>
           </table>
@@ -3939,6 +4033,16 @@ public class StartProcessInstanceTestDelegateWithInjection {
 				 可以与<emphasis>html</emphasis>一起使用，对于不支持富客户端的邮件客户端。
 				 客户端会降级到仅显示文本的方式。
                  </entry>
+               </row>
+                <row>
+                 <entry>htmlVar</entry>
+                 <entry>否</entry>
+                 <entry>使用对应的流程变量作为e-mail的内容。它和html的不同之处是它内容中包含的表达式会在mail任务发送之前被替换掉。</entry>
+               </row>
+                <row>
+                 <entry>textVar</entry>
+                 <entry>否</entry>
+                 <entry>使用对应的流程变量作为e-mail的纯文本内容。它和html的不同之处是它内容中包含的表达式会在mail任务发送之前被替换掉。</entry>
                </row>
              </tbody>
 	         </tgroup>
@@ -4060,20 +4164,20 @@ public class StartProcessInstanceTestDelegateWithInjection {
 		    <para>
 			  下面是一个使用mule任务的例子。
 		      <programlisting>
-      &lt;extensionElements&gt;
-        &lt;activiti:field name=&quot;endpointUrl&quot;&gt;
-          &lt;activiti:string&gt;vm://in&lt;/activiti:string&gt;
-        &lt;/activiti:field&gt;
-        &lt;activiti:field name=&quot;language&quot;&gt;
-          &lt;activiti:string&gt;juel&lt;/activiti:string&gt;
-        &lt;/activiti:field&gt;
-        &lt;activiti:field name=&quot;payloadExpression&quot;&gt;
-          &lt;activiti:string&gt;&quot;hi&quot;&lt;/activiti:string&gt;
-        &lt;/activiti:field&gt;
-        &lt;activiti:field name=&quot;resultVariable&quot;&gt;
-          &lt;activiti:string&gt;theVariable&lt;/activiti:string&gt;
-        &lt;/activiti:field&gt;
-      &lt;/extensionElements&gt;
+  &lt;extensionElements&gt;
+    &lt;activiti:field name=&quot;endpointUrl&quot;&gt;
+      &lt;activiti:string&gt;vm://in&lt;/activiti:string&gt;
+    &lt;/activiti:field&gt;
+    &lt;activiti:field name=&quot;language&quot;&gt;
+      &lt;activiti:string&gt;juel&lt;/activiti:string&gt;
+    &lt;/activiti:field&gt;
+    &lt;activiti:field name=&quot;payloadExpression&quot;&gt;
+      &lt;activiti:string&gt;&quot;hi&quot;&lt;/activiti:string&gt;
+    &lt;/activiti:field&gt;
+    &lt;activiti:field name=&quot;resultVariable&quot;&gt;
+      &lt;activiti:string&gt;theVariable&lt;/activiti:string&gt;
+    &lt;/activiti:field&gt;
+  &lt;/extensionElements&gt;
 		      </programlisting>
 		    </para>
 		  </section>
@@ -4118,71 +4222,290 @@ public class StartProcessInstanceTestDelegateWithInjection {
         </para>
 
         <para>
-		  如果想了解更多关于camel路由的信息，可以访问camel的网站。用户文档只包含与activiti集成相关的示例路由定义。
-		  camel任务执行时，会根据流程定义key和任务的id搜索对应的路由规则，
-		  比如上面例子中的&quot;sendCamel&quot;。
-		  java定义的路由定义看起来像是这样：
-          <programlisting>
-public class AsyncCamelRoute extends RouteBuilder {
+          如果想了解更多关于camel路由的信息，可以访问<ulink url="http://camel.apache.org/">Camel的网站</ulink>。
+		  在这里只通过很小的例子演示了基础的概念。
+		  在第一个例子中，我们会通过activiti工作流实现最简单的Camel调用。我们称其为SimpleCamelCall。
+		</para>
+		<para>
+		如果想定义多个Camel环境bean，并且（或者）想使用不同的bean名称，可以重载CamelTask的定义，如下所示：
+		<programlisting>
+&lt;serviceTask id="serviceTask1" activiti:type="camel"&gt;
+	&lt;extensionElements&gt;
+		&lt;activiti:field name="camelContext" stringValue="customCamelContext" /&gt;
+	&lt;/extensionElements&gt;
+&lt;/serviceTask&gt;
+		</programlisting>
+		</para>
+		</section>
+		<section id="bpmnCamelTaskSimpleCamelCall">
+
+		<title>简单Camel调用</title>
+<para>
+		这个例子对应的文件都可以在activiti camel模块的org.activiti.camel.examples.simpleCamelCall包下找到。我们的目标是简单激活一个特定的camel路由。
+		首先，我们需要一个Spring环境，它要包含之前介绍的路由。这些文件的目的如下：
+</para>
+
+		<programlisting>
+&lt;camelContext id="camelContext" xmlns="http://camel.apache.org/schema/spring"&gt;
+	&lt;packageScan&gt;
+		&lt;package&gt;org.activiti.camel.examples.simpleCamelCall&lt;/package&gt;
+	&lt;/packageScan&gt;
+&lt;/camelContext>
+         </programlisting>
+	   包含名为SimpleCamelCallRoute的路由的类文件，放在PackageScan标签的扫描目录下。
+	   下面就是路由的定义：
+
+         <programlisting>
+public class SimpleCamelCallRoute extends RouteBuilder {
 
   @Override
   public void configure() throws Exception {
 
-    from("activiti:asyncCamelProcess:serviceTaskAsync1?copyVariablesToProperties=true").setHeader("destination", constant("activiti:asyncCamelProcess:receive1")).to("seda:asyncQueue");
-    from("seda:asyncQueue").to("bean:sleepBean?method=sleep").to("seda:receiveQueue");
-
-    from("activiti:asyncCamelProcess:serviceTaskAsync2?copyVariablesToProperties=true").setHeader("destination", constant("activiti:asyncCamelProcess:receive2")).to("seda:asyncQueue2");
-    from("seda:asyncQueue2").to("bean:sleepBean?method=sleep").to("seda:receiveQueue");
-
-    from("seda:receiveQueue").recipientList(header("destination"));
+	  from("activiti:SimpleCamelCallProcess:simpleCall").to("log: org.activiti.camel.examples.SimpleCamelCall");
   }
-}</programlisting>
-		  注意activiti关联activiti camel迦的来源终端定义&quot;activiti:asyncCamelProcess:serviceTaskAsync1&quot;。
-		  asyncCamelProcess引用了流程定义的key。serviceTaskAsync1对应camel任务的id。
-		  流程变量可以复制到camel负载的消息体或属性中。
-		  在这里例子中，变量会作为消息属性复制过去（默认情况）。copyVariablesToBodyAsMap=true会把变量复制
-		  到camel消息体，并生成一个map实例。
-		  copyCamelBodyToBody=true会把camelBody流程变量复制到camel的消息体中。
-		  在这里例子中，我们也可以看到可以把camel消息发送给一个activiti流程实例的接收任务.
-		  例子中额外的camel逻辑是把camel消息发送给接收任务，在消息头定义属性中进行了定义。
-		  但是最终消息会发送给receive1或receive2接收任务。
-		  默认camel消息的消息体期望使用map（所有map元素可悲复制给activiti流程）
-		  或者是一个字符串，直接复制给camelBody这个流程变量。
-		  当定义了copyVariablesToProperties=true，消息属性也会复制给activiti流程。
-        </para>
+}
+</programlisting>
+这个规则仅仅打印消息体，不会做其他事情。注意终端的格式。它包含三部分：
+<table>
+<title>终端URL：</title>
+	         <tgroup cols='2'>
+	           <thead>
+	             <row>
+	               <entry>部分</entry>
+	               <entry>说明</entry>
+	             </row>
+	           </thead>
+	           <tbody>
+	             <row>
+	               <entry>终端URL</entry>
+	               <entry>引用activiti终端</entry>
+	             </row>
+	             <row>
+	               <entry>SimpleCamelCallProcess</entry>
+	               <entry>流程名</entry>
+	             </row>
+                <row>
+                 <entry>simpleCall</entry>
+                 <entry>流程中的Camel服务</entry>
+               </row>
+             </tbody>
+	         </tgroup>
+	        </table>
+	OK，我们的规则已经配置好，也可以让Camel使用了。
+	现在看工作流部分。工作流看起来像这样：
 
-        <para>
-		  处理从流程实例发送消息给camel之外，你也可以通过camel消息启动流程实例。
-          <programlisting>from("direct:start").to("activiti:camelProcess");</programlisting>
-		  注意，camelProcess是流程定义的key，当消息从direct:start队列中被读取时，就会创建对应的流程实例。
-        </para>
-
-        <para>
-		  如果想定义多个camel上下文bean，或使用不同的bean名称，可以像这样重写camel任务的定义：
           <programlisting>
-&lt;serviceTask id="serviceTask1" activiti:type="camel"&gt;
-  &lt;extensionElements&gt;
-    &lt;activiti:field name="camelContext" stringValue="customCamelContext" /&gt;
-  &lt;/extensionElements&gt;
-&lt;/serviceTask&gt;</programlisting>
-        </para>
+&lt;process id="SimpleCamelCallProcess"&gt;
+        &lt;startEvent id="start"/&gt;
+        &lt;sequenceFlow id="flow1" sourceRef="start" targetRef="simpleCall"/&gt;
+		<emphasis role="bold">
+        &lt;serviceTask id="simpleCall" activiti:type="camel"/&gt;
+		</emphasis>
+        &lt;sequenceFlow id="flow2" sourceRef="simpleCall" targetRef="end"/&gt;
+        &lt;endEvent id="end"/&gt;
+&lt;/process&gt;
+          </programlisting>
+在serviceTask部分，它只注明服务的类型是Camel，目标规则名为simpleCall。这与上面的activiti终端相匹配。初始化流程后，我们会看到一个空的日志。
+好，我们已经完成了这个最简单的例子了。
+      </section>
+	  <section id="bpmnCamelTaskPingPong">
 
-        <para>
-		  你也可以覆盖默认的camel类（org.activiti.camel.impl.CamelBehaviorDefaultImpl）。
-		  这样就可以自定义camel的处理逻辑，或修改复制流程实例到其他地方的行为了。
-		  activiti camel模块额外提供了两个camel行为类，CamelBehaviorBodyAsMapImpl和CamelBehaviorCamelBodyImpl。
-		  CamelBehaviorBodyAsMapImpl默认会把流程变量复制到camel消息体中的map实例里。（记住你可以通过例子中的
-		  copyVariablesToProperties=true来修改这个功能）。
-		  CamelBehaviorCamelBodyImpl会把名字为camelBody流程变量复制到camel消息体中。
-		  默认camel的行为类可以通过下面的属性定义来重写：
-          <programlisting>
+		<title>乒乓实例</title>
+		<para>
+我们的例子成功执行了，但是Camel和Activiti之间没有任何交互，而且这样做也没有任何优势。在这个例子里，我们尝试向Camel发送和接收数据。
+我们发送一个字符串，camel进行一些处理，然后返回结果。
+发送部分很简单，我们把变量里的消息发送给camel。这里是我们的调用代码：
+		</para>
+        <programlisting>
+@Deployment
+public void testPingPong() {
+  Map&lt;String, Object&gt; variables = new HashMap&lt;String, Object&gt;();
+
+  variables.put("input", "Hello");
+  Map&lt;String, String&gt; outputMap = new HashMap&lt;String, String&gt;();
+  variables.put("outputMap", outputMap);
+
+  runtimeService.startProcessInstanceByKey("PingPongProcess", variables);
+  assertEquals(1, outputMap.size());
+  assertNotNull(outputMap.get("outputValue"));
+  assertEquals("Hello World", outputMap.get("outputValue"));
+}
+	</programlisting>
+	<para>
+	变量"input"是Camel规则的实际输入，outputMap会记录camel返回的结果。流程应该像是这样：
+	</para>
+    <programlisting>
+&lt;process id="PingPongProcess"&gt;
+  &lt;startEvent id="start"/&gt;
+  &lt;sequenceFlow id="flow1" sourceRef="start" targetRef="ping"/&gt;
+  &lt;serviceTask id="ping" activiti:type="camel"/&gt;
+  &lt;sequenceFlow id="flow2" sourceRef="ping" targetRef="saveOutput"/&gt;
+  &lt;serviceTask id="saveOutput"  activiti:class="org.activiti.camel.examples.pingPong.SaveOutput" /&gt;
+  &lt;sequenceFlow id="flow3" sourceRef="saveOutput" targetRef="end"/&gt;
+  &lt;endEvent id="end"/&gt;
+&lt;/process&gt;
+    </programlisting>
+	<para>
+	注意，SaveOuput这个serviceTask，会把"Output"变量的值从上下文保存到上面提到的OutputMap中。
+	现在，我们必须了解变量是如何发送给Camel，再返回的。这里就要涉及到camel实际执行的行为了。
+	变量提交给camel的方法是由CamelBehavior控制的。这里我们使用默认的配置，其他的会在后面提及。
+	使用这些代码，我们就可以配置一个期望的camel行为：
+	</para>
+    <programlisting>
 &lt;serviceTask id="serviceTask1" activiti:type="camel"&gt;
   &lt;extensionElements&gt;
     &lt;activiti:field name="camelBehaviorClass" stringValue="org.activiti.camel.impl.CamelBehaviorCamelBodyImpl" /&gt;
   &lt;/extensionElements&gt;
-&lt;/serviceTask&gt;</programlisting>
-        </para>
-      </section>
+&lt;/serviceTask&gt;
+	</programlisting>
+	<para>
+	如果你没有特别指定一个行为，就会使用org.activiti.camel.impl.CamelBehaviorDefaultImpl。
+	这个行为会把变量复制成名称相同的Camel属性。
+	在返回时，无论选择什么行为，如果camel消息体是一个map，每个元素都会复制成一个变量，
+	否则整个对象会复制到指定名称为"camelBody"的变量中。
+	了解这些后，就可以看看我们第二个例子的camel规则了：
+	</para>
+    <programlisting>
+@Override
+public void configure() throws Exception {
+  from("activiti:PingPongProcess:ping").transform().simple("${property.input} World");
+}
+	</programlisting>
+	<para>
+		在这个规则中，字符串"world"会被添加到"input"属性的后面，结果会写入消息体。
+		这时可以检查javaServiceTask中的"camelBody"变量，复制到"outputMap"中，并在testcase进行判断。
+		现在这个例子是在默认的行为下运行的，然后我们看一起其他的方案。
+		在启动的所有camel规则中，流程实例id会复制到camel的名为"PROCESS_ID_PROPERTY"的属性中。
+		后续可以用它关联流程实例和camel规则。他也可以在camel规则中直接使用。
+	</para>
+	<para>
+		Activiti中可以使用三种不同的行为。这些行为可以通过在规则URL中指定对应的环节来实现覆盖。
+		这里有一个在URL中覆盖现存行为的例子：
+		<programlisting>
+from("activiti:asyncCamelProcess:serviceTaskAsync2?copyVariablesToProperties=true").
+		</programlisting>
+下面的表格提供了三种camel行为的概述：
+<table>
+<title>已有的camel行为：</title>
+	         <tgroup cols='3'>
+	           <thead>
+	             <row>
+	               <entry>行为</entry>
+	               <entry>URL</entry>
+				   <entry>描述</entry>
+	             </row>
+	           </thead>
+	           <tbody>
+	             <row>
+	               <entry>CamelBehaviorDefaultImpl</entry>
+	               <entry>copyVariablesToProperties</entry>
+				   <entry>把Activiti变量复制为Camel属性</entry>
+	             </row>
+	             <row>
+				    <entry>CamelBehaviorCamelBodyImpl</entry>
+ 	                <entry>copyCamelBodyToBody</entry>
+				    <entry>只把名为"camelBody"Activiti变量复制成camel的消息体</entry>
+	             </row>
+                <row>
+				    <entry>CamelBehaviorBodyAsMapImpl</entry>
+	               <entry>copyVariablesToBodyAsMap</entry>
+				   <entry>把activiti的所有变量复制到一个map里，作为Camel的消息体</entry>
+               </row>
+             </tbody>
+	         </tgroup>
+	        </table>
+	上面的表格解释和activiti变量如何传递给camel。下面的表格解释和camel的变量如何返回给activiti。
+	它只能配置在规则URL中。
+<table>
+<title>已有的camel行为：</title>
+	         <tgroup cols='3'>
+	           <thead>
+	             <row>
+	               <entry>Url</entry>
+				   <entry>描述</entry>
+	             </row>
+	           </thead>
+	           <tbody>
+	             <row>
+				    <entry>默认</entry>
+ 	                <entry>如果Camel消息体是一个map，把每个元素复制成activiti的变量，否则把整个camel消息体作为activiti的"camelBody"变量。</entry>
+	             </row>
+	             <row>
+	               <entry>copyVariablesFromProperties</entry>
+	               <entry>将Camel属性以相同名称复制为Activiti变量</entry>
+	             </row>
+                <row>
+				   <entry>copyCamelBodyToBodyAsString</entry>
+	               <entry>和默认一样，但是如果camel消息体不是map时，先把它转换成字符串，再设置为"camelBody"。</entry>
+               </row>
+
+                <row>
+				   <entry>isCopyVariablesFromHeader</entry>
+	               <entry>额外把camel头部以相同名称复制成Activiti变量</entry>
+               </row>
+             </tbody>
+	         </tgroup>
+	        </table>
+		例子的源码放在activiti-camel模块的org.activiti.camel.examples.pingPong包下。
+	</para>
+
+
+	</section>
+	<section id="bpmnCamelTaskAsyncPingPong">
+
+		<title>异步乒乓实例</title>
+		<para>
+		之前的例子都是同步的。流程会等到camel规则返回之后才会停止。
+		一些情况下，我们需要activiti工作流继续运行。这时camelServiceTask的异步功能就特别有用。
+		你可以通过设置camelServiceTask的async属性来启用这个功能。
+		<programlisting>
+&lt;serviceTask id="serviceAsyncPing" activiti:type="camel" activiti:async="true"/&gt;
+		</programlisting>
+		通过设置这个功能，camel规则会被activiti的jobExecutor异步执行。
+		当你在camel规则中定义了一个队列，activiti流程会在camelServiceTask执行时继续运行。
+		camel规则会以完全异步的方式执行。
+		如果你想在什么地方等待camelServiceTask的返回值，你可以使用一个receiveTask。
+		<programlisting>
+&lt;receiveTask id="receiveAsyncPing" name="Wait State" /&gt;
+		</programlisting>
+		</para>
+		流程实例会等到接收一个signal，比如来自camel。在camel中你可以发送一个signal给流程实例，通过对应的activiti终端发送消息。
+		<programlisting>
+ from("activiti:asyncPingProcess:serviceAsyncPing").to("activiti:asyncPingProcess:receiveAsyncPing");
+		</programlisting>
+	 对于一个常用的终端，会使用冒号分隔的三个部分：
+	 	<itemizedlist>
+	        <listitem>
+	          <para>
+			   常量字符串"activiti"
+			  </para>
+			</listitem>
+	        <listitem>
+	          <para>
+			    流程名称
+			  </para>
+			</listitem>
+	        <listitem>
+	          <para>
+			    接收任务名
+			  </para>
+			</listitem>
+	 	</itemizedlist>
+	</section>
+	<section id="bpmnCamelTaskAsyncPingPong">
+
+		<title>从camel规则中实例化工作流</title>
+		<para>
+		之前的所有例子中，activiti工作流会先启动，然后在流程中启动camel规则。
+		也可以使用另外一种方法。在已经启动的camel规则中启动一个工作流。
+		这会触发一个receiveTask十分类似，除了最后的部分。这是一个实例规则：
+	<programlisting>
+from("direct:start").to("activiti:camelProcess");
+	</programlisting>
+	我们看到url有两个部分，第一个部分是常量字符串"activiti"，第二部分是流程的名称。
+	很明显，流程应该已经部署完成，并且是可以启动的。
+		</para>
+	</section>
 
     </section>
 
@@ -4643,7 +4966,7 @@ public void testExecutionListenerFieldInjection() {
                   <emphasis role="bold">delete</emphasis>：只在任务删除之前发生。
 				  注意在通过completeTask正常完成时，也会执行。
                 </para>
-              </listitem>            
+              </listitem>
             </itemizedlist>
           </para>
         </listitem>
@@ -4755,7 +5078,8 @@ public class MyTaskCreateListener implements TaskListener {
 		  另外，每个创建的分支都会有分支级别的本地变量（比如，其他实例不可见，
 		  不会保存到流程实例级别）：
           <itemizedlist>
-            <listitem><para><emphasis role="bold">loopCounter</emphasis>：表示特定实例的<emphasis>在循环的索引值</emphasis></para></listitem>
+            <listitem><para><emphasis role="bold">loopCounter</emphasis>：表示特定实例的<emphasis>在循环的索引值</emphasis>。可以使用activiti的<emphasis role="bold">elementIndexVariable</emphasis>属性修改loopCounter的变量名。</para></listitem>
+
           </itemizedlist>
         </para>
 
@@ -5705,4 +6029,48 @@ public class MyTaskCreateListener implements TaskListener {
    </programlisting>
 </para>
 </section>
+
+<section id="dataobjects">
+      <title>数据对象</title>
+      <link linkend="experimental">
+      <emphasis role="bold">[试验功能]</emphasis>
+    </link>
+    <para>
+      BPMN提供了一种功能，可以在流程定义或子流程中定义数据对象。根据BPMN规范，流程定义可以包含复杂XML结构，
+	  可以导入XSD定义。对于Activiti来说，作为Activiti首次支持的数据对象，可以支持如下的XSD类型：
+    </para>
+    <itemizedlist>
+      <programlisting>
+        &lt;dataObject id="dObj1" name="StringTest" itemSubjectRef="xsd:string"/&gt;
+      </programlisting>
+      <programlisting>
+        &lt;dataObject id="dObj2" name="BooleanTest" itemSubjectRef="xsd:boolean"/&gt;
+      </programlisting>
+      <programlisting>
+        &lt;dataObject id="dObj3" name="DateTest" itemSubjectRef="xsd:datetime"/&gt;
+      </programlisting>
+      <programlisting>
+        &lt;dataObject id="dObj4" name="DoubleTest" itemSubjectRef="xsd:double"/&gt;
+      </programlisting>
+      <programlisting>
+        &lt;dataObject id="dObj5" name="IntegerTest" itemSubjectRef="xsd:int"/&gt;
+      </programlisting>
+      <programlisting>
+        &lt;dataObject id="dObj6" name="LongTest" itemSubjectRef="xsd:long"/&gt;
+      </programlisting>
+    </itemizedlist>
+    <para>
+	  数据对象定义会自动转换为流程变量，名称与'name'属性对应。
+	  除了数据对象的定义之外，activiti也支持使用扩展元素来为这个变量赋予默认值。下面的BPMN片段就是对应的例子：
+    </para>
+    <programlisting>
+        &lt;process id="dataObjectScope" name="Data Object Scope" isExecutable="true"&gt;
+          &lt;dataObject id="dObj123" name="StringTest123" itemSubjectRef="xsd:string"&gt;
+            &lt;extensionElements&gt;
+              &lt;activiti:value&gt;Testing123&lt;/activiti:value&gt;
+            &lt;/extensionElements&gt;
+          &lt;/dataObject&gt;
+      </programlisting>
+</section>
+
 </chapter>
