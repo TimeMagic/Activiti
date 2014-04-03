@@ -338,8 +338,8 @@ ProcessEngine processEngine = ProcessEngineConfiguration.createStandaloneInMemPr
     </para>
 
     <para>
-      然而，只有数据库管理员可以执行DDL语句。
-	  在生产环境，也也是最明智的选择。
+      不过，一般情况只有数据库管理员才能执行DDL语句。
+	  在生产环境，这也是最明智的选择。
       SQL DDL语句可以从Activiti下载页或Activiti发布目录里找到，在<literal>database</literal>子目录下。
       脚本也包含在引擎的jar中(<emphasis>activiti-engine-x.jar</emphasis>)，
       在<emphasis>org/activiti/db/create</emphasis>包下（<emphasis>drop</emphasis>目录里是删除语句）。
@@ -364,7 +364,7 @@ ProcessEngine processEngine = ProcessEngineConfiguration.createStandaloneInMemPr
 
     <para>
         <emphasis role="bold">MySQL用户需要注意：</emphasis> 版本低于5.6.4的MySQL不支持毫秒精度的timstamp或date类型。
-		更眼中的是，有些版本会在尝试创建这样一列时抛出异常，而有些版本则不会。
+		更严重的是，有些版本会在尝试创建这样一列时抛出异常，而有些版本则不会。
 		在执行自动创建/更新时，引擎会在执行过程中修改DDL。
 		当使用DDL时，可以选择通用版本和名为<emphasis>mysql55</emphasis>的文件。
 		（它适合所有版本低于5.6.4的情况）。
@@ -444,8 +444,8 @@ ProcessEngine processEngine = ProcessEngineConfiguration.createStandaloneInMemPr
      <para>在执行更新之前要先备份数据库
      （使用数据库的备份功能）
      </para>
-     <para>默认，每次构建流程引擎时都会还行版本检测。
-     这一版都在应用启动或Activiti webapp启动时发生。
+     <para>默认，每次构建流程引擎时都会进行版本检测。
+     这一切都在应用启动或Activiti webapp启动时发生。
      如果Activiti发现数据库表的版本与依赖库的版本不同，
      就会抛出异常。
      </para>
