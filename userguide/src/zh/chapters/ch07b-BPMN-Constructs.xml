@@ -4044,6 +4044,16 @@ public class StartProcessInstanceTestDelegateWithInjection {
                  <entry>否</entry>
                  <entry>使用对应的流程变量作为e-mail的纯文本内容。它和html的不同之处是它内容中包含的表达式会在mail任务发送之前被替换掉。</entry>
                </row>
+               <row>
+                  <entry>ignoreException</entry>
+                  <entry>否</entry>
+                  <entry>处理邮件失败时，是否忽略异常，不抛出ActivitiException，默认为false。</entry>
+               </row>
+               <row>
+                  <entry>exceptionVariableName</entry>
+                  <entry>否</entry>
+                  <entry>当设置了<emphasis>ignoreException = true</emphasis>处理email时不抛出异常，可以指定一个变量名来存储失败信息。</entry>
+               </row>
              </tbody>
 	         </tgroup>
 	        </table>
@@ -4440,7 +4450,7 @@ from("activiti:asyncCamelProcess:serviceTaskAsync2?copyVariablesToProperties=tru
                </row>
 
                 <row>
-				   <entry>isCopyVariablesFromHeader</entry>
+				   <entry>copyVariablesFromHeader</entry>
 	               <entry>额外把camel头部以相同名称复制成Activiti变量</entry>
                </row>
              </tbody>
@@ -4973,7 +4983,7 @@ public void testExecutionListenerFieldInjection() {
         <listitem>
           <para>
             <emphasis role="bold">class</emphasis>：必须调用的代理类。
-			这个类必须实现<literal>org.activiti.engine.impl.pvm.delegate.TaskListener</literal>接口。
+			这个类必须实现<literal>org.activiti.engine.delegate.TaskListener</literal>接口。
             <programlisting>
 public class MyTaskCreateListener implements TaskListener {
 

@@ -264,6 +264,134 @@ ProcessEngine processEngine = ProcessEngineConfiguration.createStandaloneInMemPr
       </itemizedlist>
     </para>
   </section>
+  
+  <section id="jndiDatasourceConfig">
+    <title>JNDI数据库配置</title>
+
+    <para>
+		默认，Activiti的数据库配置会放在web应用的WEB-INF/classes目录下的db.properties文件中。
+		这样做比较繁琐，
+		因为要用户在每次发布时，都修改Activiti源码中的db.properties并重新编译war文件，
+		或者解压缩war文件，修改其中的db.properties。
+    </para>
+    
+    <para>
+		使用JNDI（Java命名和目录接口）来获取数据库连接，
+		连接是由servlet容器管理的，可以在war部署外边管理配置。
+		与db.properties相比，
+		它也允许对连接进行更多的配置。
+    </para>
+    
+    <section id="jndi_usage">
+    
+        <title>使用</title>
+        
+        <para>
+			要想把Activiti Explorer和Activiti Rest应用从db.properties转换为使用
+			JNDI数据库配置，需要打开原始的Spring配置文件
+			（activiti-webapp-explorer2/src/main/webapp/WEB-INF/activiti-standalone-context.xml
+			和activiti-webapp-rest2/src/main/resources/activiti-context.xml），
+			删除"dbProperties"和"dataSource"两个bean，然后添加如下bean：
+            <programlisting>
+&lt;bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean"&gt;
+    &lt;property name="jndiName" value="java:comp/env/jdbc/activitiDB"/&gt;
+&lt;/bean&gt;
+            </programlisting> 
+        </para>
+        
+        <para>
+			接下来，我们需要添加包含了默认的H2配置的context.xml文件。
+			如果已经有了JNDI配置，会覆盖这些配置。
+			对Activiti Explorer来说，对应的配置文件activiti-webapp-explorer2/src/main/webapp/META-INF/context.xml
+			如下所示：
+            <programlisting>
+&lt;Context antiJARLocking="true" path="/activiti-explorer2"&gt;
+    &lt;Resource auth="Container"
+              name="jdbc/activitiDB"
+              type="javax.sql.DataSource"
+              scope="Shareable"
+              description="JDBC DataSource"
+              url="jdbc:h2:mem:activiti;DB_CLOSE_DELAY=1000"
+              driverClassName="org.h2.Driver"
+              username="sa"
+              password=""
+              defaultAutoCommit="false"
+              initialSize="5"
+              maxWait="5000"
+              maxActive="120"
+              maxIdle="5"/&gt;
+&lt;/Context&gt;
+            </programlisting>
+            
+            对于Activiti REST应用，添加的activiti-webapp-rest2/src/main/webapp/META-INF/context.xml
+			如下所示：
+            <programlisting>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;Context antiJARLocking="true" path="/activiti-rest2"&gt;
+    &lt;Resource auth="Container"
+              name="jdbc/activitiDB"
+              type="javax.sql.DataSource"
+              scope="Shareable"
+              description="JDBC DataSource"
+              url="jdbc:h2:mem:activiti;DB_CLOSE_DELAY=-1"
+              driverClassName="org.h2.Driver"
+              username="sa"
+              password=""
+              defaultAutoCommit="false"
+              initialSize="5"
+              maxWait="5000"
+              maxActive="120"
+              maxIdle="5"/&gt;
+&lt;/Context&gt;
+            </programlisting>
+        </para>
+        
+        <para>
+			可选的一步，现在可以删除Activiti Explorer和Activiti Rest两个应用中
+			不再使用的db.properties文件了。
+        </para>
+    </section>
+    
+    <section id="jndi_configuration">
+
+        <title>配置</title>
+
+        <para>
+            JNDI数据库配置会因为你使用的Servlet container不同而不同。
+			下面的配置可以在tomcat中使用，但是对其他容易，
+			请引用你使用的容器的文档。
+        </para>
+        
+        <para>
+			如果使用tomcat，JNDI资源配置在
+            $CATALINA_BASE/conf/[enginename]/[hostname]/[warname].xml
+			（对于Activiti Explorer来说，通常是在$CATALINA_BASE/conf/Catalina/localhost/activiti-explorer.war）。
+			当应用第一次发布时，会把这个文件从war中复制出来。
+			所以如果这个文件已经存在了，你需要替换它。要想修改JNDI资源让应用连接mysql而不是H2，
+			可以像下面这样修改：
+            <programlisting>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;Context antiJARLocking="true" path="/activiti-explorer2"&gt;
+        &lt;Resource auth="Container"
+            name="jdbc/activitiDB"
+            type="javax.sql.DataSource"
+            description="JDBC DataSource"
+            url="jdbc:mysql://localhost:3306/activiti"
+            driverClassName="com.mysql.jdbc.Driver"
+            username="sa"
+            password=""
+            defaultAutoCommit="false"
+            initialSize="5"
+            maxWait="5000"
+            maxActive="120"
+            maxIdle="5"/&gt;
+        &lt;/Context&gt;
+           </programlisting>
+       </para>
+
+    </section>
+    
+  </section>
 
   <section id="supporteddatabases">
     <title>支持的数据库</title>
@@ -947,6 +1075,15 @@ void addEventListener(ActivitiEventListener listenerToAdd, ActivitiEventType... 
                 <entry><literal>org.activiti...ActivitiEntityEvent</literal></entry>
               </row>
               <row>
+                <entry>JOB_CANCELED</entry>
+                <entry>取消了一个作业。事件包含取消的作业。作业可以通过API调用取消，
+				  任务完成后对应的边界定时器也会取消，在新流程定义发布时也会取消。
+                </entry>
+                <entry>
+                  <literal>org.activiti...ActivitiEntityEvent</literal>
+                </entry>
+              </row>
+              <row>
                 <entry>ACTIVITY_STARTED</entry>
                 <entry>一个节点开始执行</entry>
                 <entry><literal>org.activiti...ActivitiActivityEvent</literal></entry>
@@ -1006,10 +1143,38 @@ void addEventListener(ActivitiEventListener listenerToAdd, ActivitiEventType... 
                 <entry><literal>org.activiti...ActivitiEntityEvent</literal></entry>
               </row>
               <row>
+                <entry>TASK_CREATED</entry>
+                <entry>创建了新任务。它位于<literal>ENTITY_CREATE</literal>事件之后。当任务是由流程创建时，
+				  这个事件会在TaskListener执行之前被执行。
+                </entry>
+                <entry>
+                  <literal>org.activiti...ActivitiEntityEvent</literal>
+                </entry>
+              </row>
+              <row>
                 <entry>TASK_COMPLETED</entry>
                 <entry>任务被完成了。它会在<literal>ENTITY_DELETE</literal>事件之前触发。当任务是流程一部分时，事件会在流程继续运行之前，
 				后续事件将是<literal>ACTIVITY_COMPLETE</literal>，对应着完成任务的节点。</entry>
                 <entry><literal>org.activiti...ActivitiEntityEvent</literal></entry>
+              </row>
+              <row>
+                <entry>TASK_TIMEOUT</entry>
+                <entry>任务已超时，在<literal>TIMER_FIRED</literal>事件之后，会触发用户任务的超时事件，
+				  当这个任务分配了一个定时器的时候。
+                </entry>
+                <entry>
+                  <literal>org.activiti...ActivitiEntityEvent</literal>
+                </entry>
+              </row>
+              <row>
+                <entry>PROCESS_COMPLETED</entry>
+                <entry>流程已结束。在最后一个节点的<literal>ACTIVITY_COMPLETED</literal>事件之后触发。
+				  当流程到达的状态，没有任何后续连线时，
+				  流程就会结束。
+                </entry>
+                <entry>
+                  <literal>org.activiti...ActivitiEntityEvent</literal>
+                </entry>
               </row>
               <row>
                 <entry>MEMBERSHIP_CREATED</entry>

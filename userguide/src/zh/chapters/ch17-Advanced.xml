@@ -469,5 +469,46 @@ INFO  org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl  - class org.a
 	   </para>
 
 	</section>
+	
+	<section id="advanced.event.logging">
+	
+	   <title>事件日志（实验）</title>
+	   
+	   <para>
+		   在Activiti 5.16版本中，添加了一种（实验性）事件日志机制。这种日志机制构建在通用目的下的
+		   <link linkend="eventDispatcher">Activiti引擎的事件机制</link>，默认是禁用的。
+		   它的意图是，由引擎产生的事件会被捕获，包含所有事件数据（和其他信息）的map
+		   会被创建出来，并提供给<emphasis>org.activiti.engine.impl.event.logger.EventFlusher</emphasis>，它会把数据刷新到其他地方。
+		   默认，会使用一个简单地基于数据库的事件处理器/刷新器，它会使用jackson把map转换为JSON，
+		   并把它保存到数据库中的<emphasis>EventLogEntryEntity</emphasis>实体。默认会创建这个数据库日志表
+		   （名叫<emphasis>ACT_EVT_LOG</emphasis>）。如果没有使用事件日志，可以删除这个表。
+	   </para>
+	   
+	   <para>
+		   如果想启用数据库日志：
+	       <programlisting>
+processEngineConfiguration.setEnableDatabaseEventLogging(true);</programlisting>
+		   或者在运行阶段：
+           <programlisting>
+databaseEventLogger = new EventLogger(processEngineConfiguration.getClock());
+runtimeService.addEventListener(databaseEventLogger);</programlisting> 
+		   EventLogger类可以继承。特别是，<emphasis>createEventFlusher()</emphasis>方法
+		   需要返回一个<emphasis>org.activiti.engine.impl.event.logger.EventFlusher</emphasis>接口的实例，
+		   在不想用默认的数据日志时。<emphasis>managementService.getEventLogEntries(startLogNr, size);</emphasis> 
+		   可以获取Actviti的<emphasis>EventLogEntryEntity</emphasis>实例。
+	   </para>
+	   
+	   <para>
+	       很容易看到，现在可以使用大数据的NoSQL存储，比如MongoDb，Elastic Search等等来存储JSON。
+		   也可以看到这里使用的类（org.activiti.engine.impl.event.logger.EventLogger/EventFlusher和很多EventHandler类）
+		   是可插拔的，可以切换成你自己的应用场景（比如，不在数据库中存储JSON，而是把他们放到队列或大数据存储中。）
+	   </para>
+	   
+	   <para>
+		   注意，事件日志机制是Activiti传统历史管理器的附加品。虽然所有数据都在数据库表中，
+		   但是它并没有为查询优化，所以不容易获取。真实的使用场景是审计跟踪，和把它们放到大数据存储中。
+	   </para>
+	   
+	</section>
 
 </chapter>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+2014/7/23<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "../../../target/docbook-tool-1.0/docbook-xml/docbookx.dtd">
 
 <chapter>
@@ -4067,7 +4067,7 @@
   <section id="restExecutionsGet">
       <title>获取分支列表</title>
         <para>
-          <programlisting>GET repository/executions</programlisting>
+          <programlisting>GET runtime/executions</programlisting>
         </para>
         <para>
             <table>
@@ -4087,6 +4087,12 @@
                     <entry>否</entry>
                     <entry>String</entry>
                     <entry>只返回指定id的分支。</entry>
+                  </row>
+                  <row>
+                    <entry>activityId</entry>
+                    <entry>否</entry>
+                    <entry>String</entry>
+                    <entry>只返回指定节点id的分支。</entry>
                   </row>
                   <row>
                     <entry>processDefinitionKey</entry>
@@ -5013,6 +5019,12 @@
                     <entry>只返回可以被指定群组中用户领取的任务。</entry>
                   </row>
                   <row>
+                    <entry>candidateGroups</entry>
+                    <entry>否</entry>
+                    <entry>String</entry>
+                    <entry>只返回可以被指定群组列表中用户领取的任务。数值使用逗号分隔。</entry>
+                  </row>
+                  <row>
                     <entry>involvedUser</entry>
                     <entry>否</entry>
                     <entry>String</entry>
@@ -5163,6 +5175,13 @@
                     <entry>如果为 <literal>true</literal>，只返回未设置tenantId的任务。如果为 <literal>false</literal>，会忽略 <literal>withoutTenantId</literal> 参数。</entry>
                   </row>
                   <row>
+                    <entry>candidateOrAssigned</entry>
+                    <entry>否</entry>
+                    <entry>String</entry>
+                    <entry>选择已经被领取，或分配给某个用户，或者可以被用户领取（候选用户或组）。
+                    </entry>
+                  </row>
+                  <row>
                     <entry namest="c1" nameend="c4"><para>可以使用通用的 <link linkend="restPagingAndSort">分页和排序查询参数</link> 。</para></entry>
                   </row>
                 </tbody>
@@ -5258,7 +5277,7 @@
 }</programlisting>
         </para>
         <para>
-		  此处所有被支持的JSON参数都和<link linkend="restTasksGet">获得任务集合</link>完全一样，只是使用JSON体参数的方式替代URL参数，这样就可以使用更加高级的查询方式，并能预防请求uri过长导致的问题。除此之外，可以基于任务和流程变量进行查询。<literal>taskVariables</literal> 和 <literal>processInstanceVariables</literal> 都可以包含 <link linkend="restQueryVariable">此处描述</link>的json数组。
+		  此处所有被支持的JSON参数都和<link linkend="restTasksGet">获得任务集合</link>完全一样（除了candidateGroupIn，它只能使用在POST任务查询REST服务中），只是使用JSON体参数的方式替代URL参数，这样就可以使用更加高级的查询方式，并能预防请求uri过长导致的问题。除此之外，可以基于任务和流程变量进行查询。<literal>taskVariables</literal> 和 <literal>processInstanceVariables</literal> 都可以包含 <link linkend="restQueryVariable">此处描述</link>的json数组。
         </para>
         <para>
           <table>
@@ -6581,17 +6600,25 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
        <emphasis role="bold">请求体：</emphasis>
         <programlisting>
 {
-  "message" : "This is a comment on the task."
+  "message" : "This is a comment on the task.",
+  "saveProcessInstanceId" : true
 }</programlisting>
+        </para>
+        <para>
+          <literal>saveProcessInstanceId</literal>参数是可选的，如果为 <literal>true</literal> 会为评论保存任务的流程实例id。
         </para>
         <para>
           <emphasis role="bold">成功响应体：</emphasis>
             <programlisting>
 {
   "id" : "123",
-  "url" : "http://localhost:8081/activiti-rest/service/runtime/tasks/100/comments/123",
+  "taskUrl" : "http://localhost:8081/activiti-rest/service/runtime/tasks/101/comments/123",
+  "processInstanceUrl" : "http://localhost:8081/activiti-rest/service/history/historic-process-instances/100/comments/123",
   "message" : "This is a comment on the task.",
-  "author" : "kermit"
+  "author" : "kermit",
+  "time" : "2014-07-13T13:13:52.232+08:00"
+  "taskId" : "101",
+  "processInstanceId" : "100"
 }</programlisting>
           <table>
               <title>为任务创建评论 - 响应码</title>
@@ -6654,15 +6681,23 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
 [
   {
     "id" : "123",
-    "url" : "http://localhost:8081/activiti-rest/service/runtime/tasks/100/comments/123",
+    "taskUrl" : "http://localhost:8081/activiti-rest/service/runtime/tasks/101/comments/123",
+    "processInstanceUrl" : "http://localhost:8081/activiti-rest/service/history/historic-process-instances/100/comments/123",
     "message" : "This is a comment on the task.",
     "author" : "kermit"
+    "time" : "2014-07-13T13:13:52.232+08:00"
+    "taskId" : "101",
+    "processInstanceId" : "100"
   },
   {
     "id" : "456",
-    "url" : "http://localhost:8081/activiti-rest/service/runtime/tasks/100/comments/456",
+    "taskUrl" : "http://localhost:8081/activiti-rest/service/runtime/tasks/101/comments/456",
+    "processInstanceUrl" : "http://localhost:8081/activiti-rest/service/history/historic-process-instances/100/comments/456",
     "message" : "This is another comment on the task.",
-    "author" : "gonzo"
+    "author" : "gonzo",
+    "time" : "2014-07-13T13:13:52.232+08:00"
+    "taskId" : "101",
+    "processInstanceId" : "100"
   }
 ]</programlisting>
           <table>
@@ -6727,9 +6762,13 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
             <programlisting>
 {
   "id" : "123",
-  "url" : "http://localhost:8081/activiti-rest/service/runtime/tasks/100/comments/123",
+  "taskUrl" : "http://localhost:8081/activiti-rest/service/runtime/tasks/101/comments/123",
+  "processInstanceUrl" : "http://localhost:8081/activiti-rest/service/history/historic-process-instances/100/comments/123",
   "message" : "This is a comment on the task.",
-  "author" : "kermit"
+  "author" : "kermit",
+  "time" : "2014-07-13T13:13:52.232+08:00"
+  "taskId" : "101",
+  "processInstanceId" : "100"
 }</programlisting>
           <table>
               <title>获得任务的一个评论 - 响应码</title>
@@ -7868,17 +7907,25 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
        <emphasis role="bold">请求体：</emphasis>
         <programlisting>
 {
-  "message" : "This is a comment."
+  "message" : "This is a comment.",
+  "saveProcessInstanceId" : true
 }</programlisting>
         </para>
+        <para>
+         <literal>saveProcessInstanceId</literal>参数是可选的，如果为 <literal>true</literal> 会为评论保存流程实例id
+       </para>
         <para>
           <emphasis role="bold">成功响应体：</emphasis>
             <programlisting>
 {
   "id" : "123",
-  "url" : "http://localhost:8081/activiti-rest/history/historic-process-instances/100/comments/123",
-  "message" : "This is a comment.",
-  "author" : "kermit"
+  "taskUrl" : "http://localhost:8081/activiti-rest/service/runtime/tasks/101/comments/123",
+  "processInstanceUrl" : "http://localhost:8081/activiti-rest/service/history/historic-process-instances/100/comments/123",
+  "message" : "This is a comment on the task.",
+  "author" : "kermit",
+  "time" : "2014-07-13T13:13:52.232+08:00",
+  "taskId" : "101",
+  "processInstanceId" : "100"
 }</programlisting>
           <table>
               <title>为历史流程实例创建一条新评论 - 响应码</title>
@@ -7941,15 +7988,19 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
 [
   {
     "id" : "123",
-    "url" : "http://localhost:8081/activiti-rest/service/history/historic-process-instances/100/comments/123",
-    "message" : "This is a comment",
-    "author" : "kermit"
+    "processInstanceUrl" : "http://localhost:8081/activiti-rest/service/history/historic-process-instances/100/comments/123",
+    "message" : "This is a comment on the task.",
+    "author" : "kermit",
+    "time" : "2014-07-13T13:13:52.232+08:00",
+    "processInstanceId" : "100"
   },
-  {
+  { 
     "id" : "456",
-    "url" : "http://localhost:8081/activiti-rest/service/history/historic-process-instances/100/comments/456",
-    "message" : "This is a否ther comment.",
-    "author" : "gonzo"
+    "processInstanceUrl" : "http://localhost:8081/activiti-rest/service/history/historic-process-instances/100/comments/456",
+    "message" : "This is another comment.",
+    "author" : "gonzo",
+    "time" : "2014-07-14T15:16:52.232+08:00",
+    "processInstanceId" : "100"
   }
 ]</programlisting>
           <table>
@@ -8014,9 +8065,11 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
             <programlisting>
 {
   "id" : "123",
-  "url" : "http://localhost:8081/activiti-rest/history/historic-process-instances/100/comments/123",
-  "message" : "This is a comment.",
-  "author" : "kermit"
+  "processInstanceUrl" : "http://localhost:8081/activiti-rest/service/history/historic-process-instances/100/comments/456",
+  "message" : "This is another comment.",
+  "author" : "gonzo",
+  "time" : "2014-07-14T15:16:52.232+08:00",
+  "processInstanceId" : "100"
 }</programlisting>
           <table>
               <title>获得历史流程的一条评论 - 响应码</title>
