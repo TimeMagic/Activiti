@@ -1,5 +1,4 @@
-2014/7/23<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "../../../target/docbook-tool-1.0/docbook-xml/docbookx.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
 
 <chapter>
 
@@ -241,7 +240,7 @@
 			分页与排序参数可以添加到URL的query-string中（比如<literal>http://host/activiti-rest/service/deployments?sort=name</literal>中的name参数）。
             <table>
               <title>查询JSON参数</title>
-              <tgroup cols="2">
+              <tgroup cols="3">
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -288,7 +287,7 @@
 }</programlisting>
             <table>
               <title>查询JSON参数</title>
-              <tgroup cols="2">
+              <tgroup cols="3">
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -381,7 +380,7 @@
 
            <table>
               <title>变量JSON属性</title>
-              <tgroup cols="2">
+              <tgroup cols="3">
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -486,7 +485,7 @@
         <para>
             <table>
               <title>URL查询参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <colspec colname="c1"/>
                 <colspec colname="c2"/>
                 <colspec colname="c3"/>
@@ -605,7 +604,7 @@
         <para>
             <table>
               <title>获得一个部署 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -717,7 +716,7 @@
         <para>
             <table>
               <title>删除部署 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -769,7 +768,7 @@
         <para>
             <table>
               <title>列出部署内的资源 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -864,7 +863,7 @@
         <para>
             <table>
               <title>获取部署资源 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -954,7 +953,7 @@
         <para>
             <table>
               <title>获取部署资源的内容 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -1022,7 +1021,7 @@
         <para>
             <table>
               <title>流程定义列表 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -1201,7 +1200,7 @@
         <para>
             <table>
               <title>获得一个流程定义 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -1328,7 +1327,7 @@
         <para>
             <table>
               <title>获得一个流程定义的资源内容 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -1364,7 +1363,7 @@
         <para>
             <table>
               <title>获得流程定义的BPMN模型 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -1451,7 +1450,7 @@
 }</programlisting>
         <table id="processDefinitionActionBodyParameters">
               <title>暂停流程定义 - 请求的JSON参数</title>
-              <tgroup cols='2'>
+              <tgroup cols='3'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -1566,7 +1565,7 @@
         <para>
             <table>
               <title>获得流程定义的所有候选启动者 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -1636,7 +1635,7 @@
       <para>
           <table>
             <title>为流程定义添加一个候选启动者 - URL参数</title>
-            <tgroup cols='3'>
+            <tgroup cols='4'>
               <thead>
                 <row>
                   <entry>参数</entry>
@@ -1713,7 +1712,7 @@
       <para>
           <table>
             <title>删除流程定义的候选启动者 - URL参数</title>
-            <tgroup cols='3'>
+            <tgroup cols='4'>
               <thead>
                 <row>
                   <entry>参数</entry>
@@ -1788,7 +1787,7 @@
       <para>
           <table>
             <title>获得流程定义的一个候选启动者 - URL参数</title>
-            <tgroup cols='3'>
+            <tgroup cols='4'>
               <thead>
                 <row>
                   <entry>参数</entry>
@@ -1868,7 +1867,7 @@
         <para>
             <table>
               <title>获得模型列表 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -2038,7 +2037,7 @@
         <para>
             <table>
               <title>获得一个模型 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -2229,7 +2228,7 @@
         <para>
             <table>
               <title>删除模型 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -2282,7 +2281,7 @@
         <para>
             <table>
               <title>获得模型的可编译源码 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -2339,7 +2338,7 @@
       <para>
           <table>
             <title>设置模型的可编辑源码 - URL参数</title>
-            <tgroup cols='3'>
+            <tgroup cols='4'>
               <thead>
                 <row>
                   <entry>参数</entry>
@@ -2400,7 +2399,7 @@
         <para>
             <table>
               <title>获得模型的附加可编辑源码 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -2457,7 +2456,7 @@
       <para>
           <table>
             <title>设置模型的附加可编辑源码 - URL参数</title>
-            <tgroup cols='3'>
+            <tgroup cols='4'>
               <thead>
                 <row>
                   <entry>参数</entry>
@@ -2523,7 +2522,7 @@
         <para>
             <table>
               <title>获得流程实例 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -2589,7 +2588,7 @@
         <para>
             <table>
               <title>删除流程实例 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -2642,7 +2641,7 @@
         <para>
             <table>
               <title>激活或挂起流程实例 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -2814,7 +2813,7 @@
         <para>
             <table>
               <title>显示流程实例列表 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -3047,7 +3046,7 @@
         <para>
             <table>
               <title>获得流程实例的流程图 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -3116,7 +3115,7 @@
         <para>
             <table>
               <title>获得流程实例的参与者 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -3188,7 +3187,7 @@
         <para>
             <table>
               <title>为流程实例添加一个参与者 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -3265,7 +3264,7 @@
         <para>
             <table>
               <title>删除一个流程实例的参与者 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -3341,7 +3340,7 @@
         <para>
             <table>
               <title>列出流程实例的变量 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -3416,7 +3415,7 @@
         <para>
             <table>
               <title>获得流程实例的一个变量 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -3494,7 +3493,7 @@
 		  流程实例中不存在的变量会被创建，已存在的变量会被更新，不会有任何错误。
             <table>
               <title>创建（或更新）流程实例变量 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -3584,7 +3583,7 @@
         <para>
             <table>
               <title>更新一个流程实例变量 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -3665,7 +3664,7 @@
         <para>
             <table>
               <title>创建一个新的二进制流程变量 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -3751,7 +3750,7 @@
         <para>
             <table>
               <title>更新一个二进制的流程实例变量 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -3838,7 +3837,7 @@
         <para>
             <table>
               <title>获取一个分支 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -3905,7 +3904,7 @@
         <para>
             <table>
               <title>对分支执行操作 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -4011,7 +4010,7 @@
         <para>
             <table>
               <title>获得一个分支的所有活动节点 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -4072,7 +4071,7 @@
         <para>
             <table>
               <title>获取分支列表 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -4326,7 +4325,7 @@
         <para>
             <table>
               <title>获取分支的变量列表 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -4407,7 +4406,7 @@
         <para>
             <table>
               <title>获得分支的一个变量 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -4491,7 +4490,7 @@
 		  流程实例中不存在的变量会被创建，已存在的变量会被更新，不会有任何错误。
             <table>
               <title>新建（或更新）分支变量 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -4582,7 +4581,7 @@
         <para>
             <table>
               <title>更新分支变量 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -4663,7 +4662,7 @@
         <para>
             <table>
               <title>创建一个二进制变量 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -4749,7 +4748,7 @@
         <para>
             <table>
               <title>更新已经已存在的二进制分支变量 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -4843,7 +4842,7 @@
         <para>
             <table>
               <title>获取任务 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -4924,7 +4923,7 @@
         <para>
             <table>
               <title>任务列表 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -5471,7 +5470,7 @@
         <para>
             <table>
               <title>>删除任务 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -5540,7 +5539,7 @@
         <para>
             <table>
               <title>获得任务的变量 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -5622,7 +5621,7 @@
         <para>
             <table>
               <title>获取任务的一个变量 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -5699,7 +5698,7 @@
         <para>
             <table>
               <title>获取变量的二进制数据 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -5768,7 +5767,7 @@
         <para>
             <table>
               <title>创建任务变量 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -5872,7 +5871,7 @@
         <para>
             <table>
               <title>创建二进制任务变量 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -5960,7 +5959,7 @@
         <para>
             <table>
               <title>更新任务的一个已有变量 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -6055,7 +6054,7 @@
         <para>
             <table>
               <title>更新一个二进制任务变量 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -6145,7 +6144,7 @@
         <para>
             <table>
               <title>删除任务变量 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -6209,7 +6208,7 @@
         <para>
             <table>
               <title>删除任务的所有局部变量 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -6261,7 +6260,7 @@
         <para>
             <table>
               <title>获得任务的所有IdentityLink - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -6344,7 +6343,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
       <para>
           <table>
             <title>获得一个任务的所有组或用户的IdentityLink - URL参数</title>
-            <tgroup cols='3'>
+            <tgroup cols='4'>
               <thead>
                 <row>
                   <entry>参数</entry>
@@ -6425,7 +6424,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
       <para>
           <table>
             <title>为任务创建一个IdentityLink - URL参数</title>
-            <tgroup cols='3'>
+            <tgroup cols='4'>
               <thead>
                 <row>
                   <entry>参数</entry>
@@ -6505,7 +6504,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
       <para>
           <table>
             <title>删除任务的一个IdentityLink - URL参数</title>
-            <tgroup cols='3'>
+            <tgroup cols='4'>
               <thead>
                 <row>
                   <entry>参数</entry>
@@ -6576,7 +6575,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
             <table>
               <title>为任务创建评论 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -6655,7 +6654,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
             <table>
               <title>获得任务的所有评论 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -6731,7 +6730,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
             <table>
               <title>获得任务的一个评论 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -6801,7 +6800,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
             <table>
               <title>删除任务的一条评论 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -6857,7 +6856,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
             <table>
               <title>获得任务的所有事件 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -6925,7 +6924,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
             <table>
               <title>获得任务的一个事件 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -6996,7 +6995,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
             <table>
               <title>为任务创建一个附件，包含外部资源的链接 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -7076,7 +7075,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
             <table>
               <title>为任务创建一个附件，包含附件文件 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -7160,7 +7159,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
             <table>
               <title>获得任务的所有附件 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -7238,7 +7237,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
             <table>
               <title>获得任务的一个附件 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -7324,7 +7323,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
             <table>
               <title>获取附件的内容 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -7386,7 +7385,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
             <table>
               <title>删除任务的一个附件 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -7883,7 +7882,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
             <table>
               <title>为历史流程实例创建一条新评论 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -7962,7 +7961,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
             <table>
               <title>获得流程实例的所有评论 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -8034,7 +8033,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
             <table>
               <title>获得历史流程的一条评论 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -8102,7 +8101,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
             <table>
               <title>删除历史流程实例的一条评论 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -9657,7 +9656,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
             <table>
               <title>获得一张表 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -9716,7 +9715,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
             <table>
               <title>获得表的列信息 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -9788,7 +9787,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
             <table>
               <title>获得表的行数据 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -9811,7 +9810,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
             <table>
               <title>获得表的行数据 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -9998,7 +9997,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
 }</programlisting>
         <table>
               <title>接收信号事件 - JSON体参数</title>
-              <tgroup cols='2'>
+              <tgroup cols='3'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -10073,7 +10072,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
             <table>
               <title>获取一个作业 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -10142,7 +10141,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
             <table>
               <title>删除作业 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -10200,7 +10199,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
 }</programlisting>
         <table>
               <title>执行作业 - 请求的JSON参数</title>
-              <tgroup cols='2'>
+              <tgroup cols='3'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -10255,7 +10254,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
         <table>
               <title>获得作业的异常堆栈 - URL参数</title>
-              <tgroup cols='2'>
+              <tgroup cols='3'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -10306,7 +10305,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
         <table>
               <title>获得作业列表 - URL参数</title>
-              <tgroup cols='2'>
+              <tgroup cols='3'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -10372,26 +10371,23 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
                   </row>
                   <row>
                     <entry>exceptionMessage</entry>
-                    <entry>Only return jobs with the given exception message</entry>
+                    <entry>只返回指定异常信息的作业</entry>
                     <entry>String</entry>
                   </row>
                   <row>
                     <entry>tenantId</entry>
-                    <entry>否</entry>
-                    <entry>String</entry>
                     <entry>只返回指定tenantId的作业。</entry>
+                    <entry>String</entry>
                   </row>
                  <row>
                     <entry>tenantIdLike</entry>
-                    <entry>否</entry>
-                    <entry>String</entry>
                     <entry>只返回与指定tenantId匹配的作业。</entry>
+                    <entry>String</entry>
                   </row>
                   <row>
                     <entry>withoutTenantId</entry>
-                    <entry>否</entry>
-                    <entry>Boolean</entry>
                     <entry>如果为 <literal>true</literal>，只返回未设置tenantId的作业。如果为 <literal>false</literal>，会忽略 <literal>withoutTenantId</literal> 参数。</entry>
+                    <entry>Boolean</entry>
                   </row>
                   <row>
                     <entry>sort</entry>
@@ -10469,7 +10465,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
             <table>
               <title>获得一个用户 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -10531,7 +10527,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
         <table>
               <title>获取用户列表 - URL参数</title>
-              <tgroup cols='2'>
+              <tgroup cols='3'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -10750,7 +10746,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
       <para>
           <table>
             <title>删除用户 - URL参数</title>
-            <tgroup cols='3'>
+            <tgroup cols='4'>
               <thead>
                 <row>
                   <entry>参数</entry>
@@ -10802,7 +10798,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
       <para>
           <table>
             <title>获取用户图片 - URL参数</title>
-            <tgroup cols='3'>
+            <tgroup cols='4'>
               <thead>
                 <row>
                   <entry>参数</entry>
@@ -10857,7 +10853,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
       <para>
           <table>
             <title>更新用户图片 - URL参数</title>
-            <tgroup cols='3'>
+            <tgroup cols='4'>
               <thead>
                 <row>
                   <entry>参数</entry>
@@ -10919,7 +10915,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
       <para>
           <table>
             <title>列出用户列表 - URL参数</title>
-            <tgroup cols='3'>
+            <tgroup cols='4'>
               <thead>
                 <row>
                   <entry>参数</entry>
@@ -10984,7 +10980,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
       <para>
           <table>
             <title>获取用户信息 - URL参数</title>
-            <tgroup cols='3'>
+            <tgroup cols='4'>
               <thead>
                 <row>
                   <entry>参数</entry>
@@ -11050,7 +11046,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
       <para>
           <table>
             <title>更新用户的信息 - URL参数</title>
-            <tgroup cols='3'>
+            <tgroup cols='4'>
               <thead>
                 <row>
                   <entry>参数</entry>
@@ -11127,7 +11123,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
       <para>
           <table>
             <title>创建用户信息条目 - URL参数</title>
-            <tgroup cols='3'>
+            <tgroup cols='4'>
               <thead>
                 <row>
                   <entry>参数</entry>
@@ -11203,7 +11199,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
       <para>
           <table>
             <title>删除用户的信息 - URL参数</title>
-            <tgroup cols='3'>
+            <tgroup cols='4'>
               <thead>
                 <row>
                   <entry>参数</entry>
@@ -11265,7 +11261,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
             <table>
               <title>获得群组 - URL参数</title>
-              <tgroup cols='3'>
+              <tgroup cols='4'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -11326,7 +11322,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
         <para>
         <table>
               <title>获取群组列表 - URL参数</title>
-              <tgroup cols='2'>
+              <tgroup cols='3'>
                 <thead>
                   <row>
                     <entry>参数</entry>
@@ -11513,7 +11509,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
       <para>
           <table>
             <title>删除群组 - URL参数</title>
-            <tgroup cols='3'>
+            <tgroup cols='4'>
               <thead>
                 <row>
                   <entry>参数</entry>
@@ -11569,7 +11565,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
       <para>
           <table>
             <title>为群组添加一个成员 - URL参数</title>
-            <tgroup cols='3'>
+            <tgroup cols='4'>
               <thead>
                 <row>
                   <entry>参数</entry>
@@ -11645,7 +11641,7 @@ GET runtime/tasks/{taskId}/identitylinks/groups</programlisting>
       <para>
           <table>
             <title>删除群组的成员 - URL参数</title>
-            <tgroup cols='3'>
+            <tgroup cols='4'>
               <thead>
                 <row>
                   <entry>参数</entry>

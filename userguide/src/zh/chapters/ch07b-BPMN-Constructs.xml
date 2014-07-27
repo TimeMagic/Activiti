@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "../../../target/docbook-tool-1.0/docbook-xml/docbookx.dtd">
+
 <chapter id="bpmnConstructs">
 	<title>BPMN 2.0结构</title>
 
@@ -1493,7 +1493,7 @@ ProcessInstance startProcessInstanceByMessage(String messageName, String busines
 	        </para>
 	      </section>
 
-	      <section id="bpmnBoundarySignalEventXml">
+	      <section id="bpmnBoundarySignalEventXml.2">
 	        <title>XML内容</title>
 	         <para>
 			    取消边界事件定义为普通<link linkend="bpmnBoundaryEvent">边界事件</link>：
@@ -1758,7 +1758,7 @@ ProcessInstance startProcessInstanceByMessage(String messageName, String busines
 	        </para>
 	      </section>
 
-	      <section id="bpmnIntermediateSignalEventXml">
+	      <section id="bpmnIntermediateSignalEventXml.2">
 	        <title>XML内容</title>
 	         <para>
 				 消息中间事件定义为标准<link linkend="bpmnIntermediateCatchingEvent">中间捕获事件</link>。
@@ -1904,7 +1904,7 @@ ProcessInstance startProcessInstanceByMessage(String messageName, String busines
         	</para>
 	      </section>
 
-	      <section id="bpmnIntermediateSignalEventExample">
+	      <section id="bpmnIntermediateSignalEventExample.2">
 	        <title>实例</title>
 	        <para>
 	        	参考<link linkend="bpmnSignalEventDefinition">信号事件定义</link>章节。
@@ -2042,7 +2042,7 @@ ProcessInstance startProcessInstanceByMessage(String messageName, String busines
 	        </para>
 	      </section>
 
-	      <section id="bpmnIntermediateThrowSignalEventXml">
+	      <section id="bpmnIntermediateThrowSignalEventXml.2">
 	        <title>Xml内容</title>
 	         <para>
 				 补偿中间事件定义为普通的<link linkend="bpmnIntermediateThrowingEvent">中间触发事件</link>。
@@ -4502,7 +4502,7 @@ from("activiti:asyncCamelProcess:serviceTaskAsync2?copyVariablesToProperties=tru
 			</listitem>
 	 	</itemizedlist>
 	</section>
-	<section id="bpmnCamelTaskAsyncPingPong">
+	<section id="bpmnCamelTaskAsyncPingPong.2">
 
 		<title>从camel规则中实例化工作流</title>
 		<para>
@@ -4642,7 +4642,7 @@ assertNotNull(execution);
 			  可以配置以下属性：
 		      <table>
 	         <title>Shell任务参数配置</title>
-	         <tgroup cols='3'>
+	         <tgroup cols='5'>
 	           <thead>
 	             <row>
 	               <entry>属性</entry>
@@ -5641,7 +5641,7 @@ public class MyTaskCreateListener implements TaskListener {
 
 		  </section>
 
-		  <section id="bpmnEventSubprocessGraphicalNotation">
+		  <section id="bpmnEventSubprocessGraphicalNotation.2">
 
         <title>图形标记</title>
 
@@ -5652,7 +5652,7 @@ public class MyTaskCreateListener implements TaskListener {
 
       </section>
 
-      <section id="bpmnEventSubprocessXMLRepresentation">
+      <section id="bpmnEventSubprocessXMLRepresentation.2">
 
         <title>XML内容</title>
 
@@ -5667,7 +5667,7 @@ public class MyTaskCreateListener implements TaskListener {
 
       </section>
 
-      <section id="bpmnEventSubprocessExample">
+      <section id="bpmnEventSubprocessExample.2">
 
         <title>实例</title>
 
@@ -6050,24 +6050,36 @@ public class MyTaskCreateListener implements TaskListener {
 	  可以导入XSD定义。对于Activiti来说，作为Activiti首次支持的数据对象，可以支持如下的XSD类型：
     </para>
     <itemizedlist>
+	    <listitem>
       <programlisting>
         &lt;dataObject id="dObj1" name="StringTest" itemSubjectRef="xsd:string"/&gt;
       </programlisting>
+	    </listitem>
+ 	    <listitem>
       <programlisting>
         &lt;dataObject id="dObj2" name="BooleanTest" itemSubjectRef="xsd:boolean"/&gt;
       </programlisting>
+	    </listitem>
+ 	    <listitem>
       <programlisting>
         &lt;dataObject id="dObj3" name="DateTest" itemSubjectRef="xsd:datetime"/&gt;
       </programlisting>
+	    </listitem>
+ 	    <listitem>
       <programlisting>
         &lt;dataObject id="dObj4" name="DoubleTest" itemSubjectRef="xsd:double"/&gt;
       </programlisting>
+	    </listitem>
+ 	    <listitem>
       <programlisting>
         &lt;dataObject id="dObj5" name="IntegerTest" itemSubjectRef="xsd:int"/&gt;
       </programlisting>
+	    </listitem>
+ 	    <listitem>
       <programlisting>
         &lt;dataObject id="dObj6" name="LongTest" itemSubjectRef="xsd:long"/&gt;
       </programlisting>
+	    </listitem>
     </itemizedlist>
     <para>
 	  数据对象定义会自动转换为流程变量，名称与'name'属性对应。

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "../../../target/docbook-tool-1.0/docbook-xml/docbookx.dtd">
 
 <chapter id="chapterApi">
   <title>Activiti API</title>
@@ -434,7 +433,7 @@ try {
         </para>
     </section>
 
-    <section id="api.services">
+    <section id="api.services.2">
         <title>更多知识</title>
         <para>
 			上面章节中我们仅仅覆盖了Activiti功能的表层。
