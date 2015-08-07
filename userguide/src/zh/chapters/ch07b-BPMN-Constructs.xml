@@ -2899,7 +2899,7 @@ assertEquals("Ship Order", task.getName());</programlisting>
 
 		  这会获取所有kermit为<emphasis role="bold">候选人</emphasis>的任务，
 		  例如：表达式中包含<emphasis>user(kermit)</emphasis>。
-		  这也会获得所有<emphasis role="bold">分配包含kermit这个成员的群组</emphasis>
+		  这也会获得所有<emphasis role="bold">分配包含kermit这个成员的群组</emphasis>的任务。
 		  （比如，<emphasis>group(management)</emphasis>，前提是kermit是这个组的成员，
 		  并且使用了activiti的账号组件）。
 		  用户所在的群组是在运行阶段获取的，它们可以通过
