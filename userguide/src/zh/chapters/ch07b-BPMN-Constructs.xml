@@ -2971,7 +2971,7 @@ assertEquals("Ship Order", task.getName());</programlisting>
           <para>
 		    注意：虽然activiti提供了一个账号管理组件，
 			也提供了<link linkend="apiEngine">IdentityService</link>，
-			但是账号组件不会检测设置的用户是否村爱。
+			但是账号组件不会检测设置的用户是否存在。
 			它嵌入到应用中，也允许activiti与其他已存的账户管理方案集成。
           </para>
 
